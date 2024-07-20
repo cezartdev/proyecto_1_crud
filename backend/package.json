@@ -1,0 +1,31 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "Aprendiendo Mern",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon index.js",
+        "start": "node index.js"
+    },
+    "keywords": [
+        "MERN",
+        "NODE",
+        "JS"
+    ],
+    "author": "Cesar Salazar",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.1",
+        "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongodb": "^6.3.0",
+        "mongoose": "^8.1.1",
+        "transbank-sdk": "^5.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.3"
+    }
+}
