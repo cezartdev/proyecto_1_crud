@@ -1,3 +1,4 @@
-# Diseño
+# Proyecto N°1 CRUD
 
--   landing page
+-   Inicio de sesión
+-   Jerarquía de Usuarios
