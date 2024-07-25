@@ -54,6 +54,12 @@ const BackgroundStyle = styled.div`
                 font-weight: bold;
                 width: 100%;
                 margin-top: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            a {
+                text-decoration: none;
+                color: #3bc2bc;
             }
         }
     }
@@ -109,6 +115,8 @@ function FormLogin() {
                         </div>
 
                         <button>Iniciar Sesión</button>
+
+                        <a href="#">¿No tienes una cuenta?</a>
                     </fieldset>
                 </form>
             </BackgroundStyle>
