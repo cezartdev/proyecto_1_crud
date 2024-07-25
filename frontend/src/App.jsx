@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import Inicio from "./pages/Inicio";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 function App() {
     return (
@@ -8,7 +8,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Layout />}>
-                        <Route index element={<Inicio />} />
+                        <Route index element={<Login />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
