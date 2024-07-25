@@ -88,7 +88,7 @@ function FormLogin() {
     return (
         <>
             <BackgroundStyle>
-                <form>
+                <form onSubmit={EnviarEmail}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="icon icon-tabler icon-tabler-user"
@@ -109,9 +109,21 @@ function FormLogin() {
                         <legend>Inicio de Sesión</legend>
                         <div>
                             <label>Correo</label>
-                            <input type="text" placeholder="Correo" />
+                            <input
+                                type="text"
+                                placeholder="Correo"
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                }}
+                            />
                             <label>Contraseña</label>
-                            <input type="text" placeholder="Contraseña" />
+                            <input
+                                type="text"
+                                placeholder="Contraseña"
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                }}
+                            />
                         </div>
 
                         <button>Iniciar Sesión</button>
