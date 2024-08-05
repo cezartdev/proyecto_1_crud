@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import MenuDropdown from "../components/Utils/MenuDropDown";
@@ -55,28 +55,60 @@ const Logo = styled.div`
 
 `
 
-function AuthLayout() {
+const ButtonContainer = styled.div`
+
+    display: flex;
+    justify-content: center;
+    
+    position: relative;
+    
+    
+
+    button{
+        color: var(--primary);
+        background-color: white;
+        font-weight: bold;
+        padding: 0.8rem 5rem;
+    }
+
+`
+
+function Layout() {
+    const navigate = useNavigate();
+
+    const navegarInicio = ()=>{
+        navigate("/")
+    }
     return (
         <>
             <Flex>
                 <BackgroundColumn>
                     <Logo>
-                        <Link to="#">ERP</Link>
+                        <Link to="/dashboard">ERP</Link>
                     </Logo>
                     <ul>
-                        <MenuDropdown name="Clientes" data={[{name:"opcion 1", link:"#"}, {name:"opcion 2",link:"#"}]}/>
+                        <MenuDropdown name="Clientes" data={[{name:"Ver Clientes", link:"get-customers"}, {name:"opcion 2",link:"#"}]}/>
                         <MenuDropdown name="Funcion 1" data={[{name:"opcion 1", link:"#"}, {name:"opcion 2",link:"#"}]}/>
                         
                       
                     </ul>
-                    <div>
-                        <button>salir</button>
-                    </div>
+                    <ButtonContainer>
+                        <button type="submit" onClick={navegarInicio}>salir</button>
+                    </ButtonContainer>
                 </BackgroundColumn>
-                <Outlet />
+                <div>
+                    <div>
+                        <a href="#">link 1</a>
+                        <a href="#">link 1</a>
+                        <a href="#">link 1</a>
+                        <a href="#">link 1</a>
+                        <a href="#">link 1</a>
+                    </div>
+                    <Outlet />
+                </div>
             </Flex>
         </>
     );
 }
 
-export default AuthLayout;
+export default Layout;

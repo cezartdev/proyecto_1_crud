@@ -2,10 +2,10 @@ function Dashboard() {
   return (
     <>
       <div>
-        <h1>asd</h1>
+        <h1>Menu Principal</h1>
       </div>
     </>
   )
 }
 
-export default Dashboard
+export default Dashboard;

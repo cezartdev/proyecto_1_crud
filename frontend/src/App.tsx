@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./components/AuthContext";
+import VerClientes from "./pages/clientes/VerClientes";
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -14,8 +15,8 @@ const App: React.FC = () => {
             <Route index element={<Login />} />
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Layout />}>
-
                 <Route index element={<Dashboard />} />
+                <Route path="get-customers" element={<VerClientes />} />
               </Route>
             </Route>
           </Route>
