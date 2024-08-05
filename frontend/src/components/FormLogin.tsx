@@ -69,7 +69,7 @@ function FormLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const EnviarEmail = async (e) => {
+    const EnviarEmail = async (e : any) => {
         e.preventDefault();
 
         try {
@@ -82,7 +82,7 @@ function FormLogin() {
             );
             console.log(data);
             console.log(data.response.usertype)
-        } catch (error) {
+        } catch (error : any) {
             const { msg } = error.response.data.response;
             console.log(error.response.data);
             console.log(msg);
@@ -95,15 +95,15 @@ function FormLogin() {
                 <form onSubmit={EnviarEmail}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-user"
+                        className="icon icon-tabler icon-tabler-user"
                         width="44"
                         height="44"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke="#000000"
                         fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                     >
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />

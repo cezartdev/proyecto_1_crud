@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import styled from "styled-components";
 import FormLogin from "../components/FormLogin";
 
