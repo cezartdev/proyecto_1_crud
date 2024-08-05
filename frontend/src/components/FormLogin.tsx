@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import { useAuth } from "./AuthContext";
 const BackgroundStyle = styled.div`
     width: var(--section-center);
     margin: 0 auto;
@@ -68,8 +69,10 @@ const BackgroundStyle = styled.div`
 function FormLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-    const EnviarEmail = async (e : any) => {
+    const EnviarEmail = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
@@ -81,11 +84,11 @@ function FormLogin() {
                 }
             );
             console.log(data);
-            console.log(data.response.usertype)
+            console.log(data.response.usertype);
+            login(data.token);
+            navigate("/dashboard");
         } catch (error : any) {
-            const { msg } = error.response.data.response;
             console.log(error.response.data);
-            console.log(msg);
         }
     };
 
@@ -122,7 +125,7 @@ function FormLogin() {
                             />
                             <label>Contraseña</label>
                             <input
-                                type="text"
+                                type="password"
                                 placeholder="Contraseña"
                                 onChange={(e) => {
                                     setPassword(e.target.value);
