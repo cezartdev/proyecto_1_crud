@@ -72,16 +72,20 @@ function FormLogin() {
     const EnviarEmail = async (e) => {
         e.preventDefault();
 
-        let urlBackend = "/api/login-users";
-
         try {
-            const { data } = await axios.post(`${urlBackend}`, {
-                email,
-                password,
-            });
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
+                {
+                    email,
+                    password,
+                }
+            );
             console.log(data);
+            console.log(data.response.usertype)
         } catch (error) {
-            console.log(error.message);
+            const { msg } = error.response.data.response;
+            console.log(error.response.data);
+            console.log(msg);
         }
     };
 
