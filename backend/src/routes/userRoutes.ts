@@ -5,6 +5,10 @@ import { handleInputErrors, handlePasswordEncrypt } from "../middleware"
 
 const router = Router()
 
+//tipos de usuario permitidos
+//TODO: Mover esto a una validación mejor
+const type = ["admin", "cliente"]
+
 //Routing
 router.post("/create",
     body("email")
@@ -13,7 +17,8 @@ router.post("/create",
     body("password")
         .notEmpty().withMessage("La contraseña está vacía"),
     body("type")
-        .notEmpty().withMessage("El tipo de usuario está vacío"),
+        .notEmpty().withMessage("El tipo de usuario está vacío")
+        .custom(value => type.includes(value)).withMessage("Tipo de usuario no permitido"),
     handleInputErrors,
     handlePasswordEncrypt,
     createUser )

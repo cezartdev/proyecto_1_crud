@@ -4,16 +4,18 @@ import bcrypt from "bcrypt"
 import colors from "colors"
 
 export const createUser = async (req: Request, res: Response) => {
-
+    //Todos los errores a este punto son de Sequelize
     try {
-        
         
         const user = await User.create(req.body)
         res.json({data: user })
         
-    } catch (error) {
+    } catch (error) { 
+        if(error.name=== "SequelizeUniqueConstraintError"){
+          error.msg = "Un usuario con ese correo ya existe"
+        }
         
-        res.status(400).json({response: error})
+        res.status(400).json({error})
     }
     
 
@@ -43,6 +45,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const loginValidate = async (req: Request, res: Response) => {
     // lógica para obtener el usuario
     try {
+        
         const email = await req.body.email
         
         const user = await User.findOne({ where: { email} });
@@ -50,7 +53,8 @@ export const loginValidate = async (req: Request, res: Response) => {
         //Ejemplo del id: user.dataValues.id
 
         if (!user) {
-            return res.status(400).json({ response: {msg: "No existe el usuario" }});
+            const errors = [{msg:"Usuario o contraseña incorrecta"}]
+            return res.status(400).json({errors: errors})
         }
 
         const plainPassword = await req.body.password
@@ -66,14 +70,15 @@ export const loginValidate = async (req: Request, res: Response) => {
             res.status(200).json({response: {usertype: userType}});
         }else{
             // El mismo formato de errores
-            // const errors = [{msg:"Usuario o contraseña incorrecta"}]
-            res.status(400).json({response: {msg :"Usuario o contraseña incorrecta" }})
+            const errors = [{msg:"Usuario o contraseña incorrecta"}]
+            res.status(400).json({errors: errors})
         }
     
     } catch (error) {
         console.log(colors.bgRed.white.bold(`${error}`));
         console.log(colors.bgRed.white.bold(`Error en el login del usuario`))
-        res.status(400).json({response: error})
+        const errors = [{msg:"Error al ingresar"}]
+        res.status(400).json({error: errors})
     }
 };
 
