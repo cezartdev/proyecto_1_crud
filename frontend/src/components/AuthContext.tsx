@@ -3,7 +3,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 // Define las interfaces para el contexto de autenticación
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  userType: string | null;
+  login: (token: string, userType: string) => void;
   logout: () => void;
 }
 
@@ -18,26 +19,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return !!sessionStorage.getItem('authToken');
   });
+  const [userType, setUserType] = useState<string | null>(() => {
+    return sessionStorage.getItem('userType');
+  });
 
-  const login = (token: string) => {
+  const login = (token: string, userType: string) => {
     sessionStorage.setItem('authToken', token);
+    sessionStorage.setItem('userType', userType);
     setIsAuthenticated(true);
+    setUserType(userType);
   };
 
   const logout = () => {
     sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('userType');
     setIsAuthenticated(false);
+    setUserType(null);
   };
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
+    const userType = sessionStorage.getItem('userType');
     if (token) {
       setIsAuthenticated(true);
+      setUserType(userType);
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userType, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

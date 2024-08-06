@@ -13,6 +13,8 @@ export const createUser = async (req: Request, res: Response) => {
     } catch (error) { 
         if(error.name=== "SequelizeUniqueConstraintError"){
           error.msg = "Un usuario con ese correo ya existe"
+        }else{
+            error.msg = "Ocurrio un error inesperado"
         }
         
         res.status(400).json({error})

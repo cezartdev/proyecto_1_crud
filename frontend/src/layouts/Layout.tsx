@@ -2,6 +2,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import MenuDropdown from "../components/Utils/MenuDropDown";
+import { useAuth } from '../components/AuthContext';
 
 const BackgroundColumn = styled.div`
     background-color: var(--primary);
@@ -75,10 +76,12 @@ const ButtonContainer = styled.div`
 
 function Layout() {
     const navigate = useNavigate();
+    const { userType } = useAuth(); // Obtener el tipo de usuario del contexto
 
-    const navegarInicio = ()=>{
-        navigate("/")
+    const navegarInicio = () => {
+        navigate("/");
     }
+
     return (
         <>
             <Flex>
@@ -87,22 +90,23 @@ function Layout() {
                         <Link to="/dashboard">ERP</Link>
                     </Logo>
                     <ul>
-                        <MenuDropdown name="Clientes" data={[{name:"Ver Clientes", link:"get-customers"}, {name:"opcion 2",link:"#"}]}/>
-                        <MenuDropdown name="Funcion 1" data={[{name:"opcion 1", link:"#"}, {name:"opcion 2",link:"#"}]}/>
-                        
-                      
+                        {userType === 'admin' && (
+                            <MenuDropdown name="Admin Panel" data={[{name:"Admin Settings", link:"admin-settings"}, {name:"User Management",link:"user-management"}]} />
+                        )}
+                        <MenuDropdown name="Clientes" data={[{name:"Ver Clientes", link:"get-customers"}, {name:"Opción 2",link:"#"}]} />
+                        <MenuDropdown name="Función 1" data={[{name:"Opción 1", link:"#"}, {name:"Opción 2",link:"#"}]} />
                     </ul>
                     <ButtonContainer>
-                        <button type="submit" onClick={navegarInicio}>salir</button>
+                        <button type="submit" onClick={navegarInicio}>Salir</button>
                     </ButtonContainer>
                 </BackgroundColumn>
                 <div>
                     <div>
-                        <a href="#">link 1</a>
-                        <a href="#">link 1</a>
-                        <a href="#">link 1</a>
-                        <a href="#">link 1</a>
-                        <a href="#">link 1</a>
+                        <a href="#">Link 1</a>
+                        <a href="#">Link 2</a>
+                        <a href="#">Link 3</a>
+                        <a href="#">Link 4</a>
+                        <a href="#">Link 5</a>
                     </div>
                     <Outlet />
                 </div>
