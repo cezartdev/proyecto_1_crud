@@ -68,8 +68,9 @@ export const loginValidate = async (req: Request, res: Response) => {
         //En este punto isMatch devuelve true si es correcta la contraseña o false si no
 
         const userType = user.dataValues.type
+        const userEmail = user.dataValues.email
         if(isMatch){
-            res.status(200).json({response: {usertype: userType}});
+            res.status(200).json({response: {usertype: userType, email:userEmail }});
         }else{
             // El mismo formato de errores
             const errors = [{msg:"Usuario o contraseña incorrecta"}]

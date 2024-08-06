@@ -3,6 +3,8 @@ function Dashboard() {
     <>
       <div>
         <h1>Menu Principal</h1>
+
+        <p>hola mundo</p>
       </div>
     </>
   )

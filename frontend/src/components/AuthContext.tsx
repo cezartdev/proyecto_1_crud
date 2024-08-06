@@ -4,7 +4,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 interface AuthContextType {
   isAuthenticated: boolean;
   userType: string | null;
-  login: (token: string, userType: string) => void;
+  userEmail: string | null;
+  login: (token: string, userType: string, userEmail: string) => void;
   logout: () => void;
 }
 
@@ -22,32 +23,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userType, setUserType] = useState<string | null>(() => {
     return sessionStorage.getItem('userType');
   });
+  const [userEmail, setUserEmail] = useState<string | null>(() => {
+    return sessionStorage.getItem('userEmail');
+  });
 
-  const login = (token: string, userType: string) => {
+  const login = (token: string, userType: string, userEmail: string) => {
     sessionStorage.setItem('authToken', token);
     sessionStorage.setItem('userType', userType);
+    sessionStorage.setItem('userEmail', userEmail);
     setIsAuthenticated(true);
     setUserType(userType);
+    setUserEmail(userEmail);
   };
 
   const logout = () => {
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('userType');
+    sessionStorage.removeItem('userEmail');
     setIsAuthenticated(false);
     setUserType(null);
+    setUserEmail(null);
   };
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     const userType = sessionStorage.getItem('userType');
+    const userEmail = sessionStorage.getItem('userEmail');
     if (token) {
       setIsAuthenticated(true);
       setUserType(userType);
+      setUserEmail(userEmail);
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userType, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userType, userEmail, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -67,78 +67,79 @@ const BackgroundStyle = styled.div`
 `;
 
 function FormLogin() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-    const { login } = useAuth();
-  
-    const Login = async (e: React.FormEvent) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const Login = async (e: React.FormEvent) => {
       e.preventDefault();
-  
+
       try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
-          {
-            email,
-            password,
-          }
-        );
-        console.log(data);
-        console.log(data.response.usertype);
-        login(data.token, data.response.usertype); // Incluye el tipo de usuario
-        navigate("/dashboard");
+          const { data } = await axios.post(
+              `${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
+              {
+                  email,
+                  password,
+              }
+          );
+          console.log(data);
+          console.log(data.response.usertype);
+          console.log(data.response.email);
+          login(data.token, data.response.usertype, data.response.email); // Incluye el tipo de usuario y el email del usuario
+          navigate("/dashboard");
       } catch (error: any) {
-        console.log(error.response.data);
+          console.log(error.response.data);
       }
-    };
-  
-    return (
+  };
+
+  return (
       <BackgroundStyle>
-        <form onSubmit={Login}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="icon icon-tabler icon-tabler-user"
-            width="44"
-            height="44"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="#000000"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-          </svg>
-          <fieldset>
-            <legend>Inicio de Sesión</legend>
-            <div>
-              <label>Correo</label>
-              <input
-                type="text"
-                placeholder="Correo"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <label>Contraseña</label>
-              <input
-                type="password"
-                placeholder="Contraseña"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-            </div>
-  
-            <button>Iniciar Sesión</button>
-  
-            <a href="#">¿No tienes una cuenta?</a>
-          </fieldset>
-        </form>
+          <form onSubmit={Login}>
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-user"
+                  width="44"
+                  height="44"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="#000000"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+              >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+              </svg>
+              <fieldset>
+                  <legend>Inicio de Sesión</legend>
+                  <div>
+                      <label>Correo</label>
+                      <input
+                          type="text"
+                          placeholder="Correo"
+                          onChange={(e) => {
+                              setEmail(e.target.value);
+                          }}
+                      />
+                      <label>Contraseña</label>
+                      <input
+                          type="password"
+                          placeholder="Contraseña"
+                          onChange={(e) => {
+                              setPassword(e.target.value);
+                          }}
+                      />
+                  </div>
+
+                  <button>Iniciar Sesión</button>
+
+                  <a href="#">¿No tienes una cuenta?</a>
+              </fieldset>
+          </form>
       </BackgroundStyle>
-    );
-  }
-  
-  export default FormLogin;
+  );
+}
+
+export default FormLogin;
