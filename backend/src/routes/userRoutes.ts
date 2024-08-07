@@ -33,7 +33,7 @@ router.post("/login",
         .notEmpty().withMessage("El correo esta vacío")
         .isEmail().withMessage("El correo no está en el formato"),
     body("password")
-        .notEmpty().withMessage("El correo esta vacío"),
+        .notEmpty().withMessage("La contraseña esta vacía"),
     handleInputErrors,
     loginValidate)
 

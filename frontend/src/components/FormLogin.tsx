@@ -72,6 +72,7 @@ function FormLogin() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+
   const Login = async (e: React.FormEvent) => {
       e.preventDefault();
 
@@ -84,12 +85,33 @@ function FormLogin() {
               }
           );
           console.log(data);
-          console.log(data.response.usertype);
-          console.log(data.response.email);
+          
           login(data.token, data.response.usertype, data.response.email); // Incluye el tipo de usuario y el email del usuario
           navigate("/dashboard");
       } catch (error: any) {
-          console.log(error.response.data);
+
+        //   console.log(error.response.data.errors)
+          let emailBool : boolean = false
+          let passwordBool : boolean = false
+          let errorMessages : Array<string> = []
+
+
+          error.response.data.errors.forEach((element : any) => {
+           
+            if(element.path === "email" && emailBool === false){
+                emailBool = true
+                errorMessages.push(element.msg)
+            }
+
+
+            if(element.path === "password" && passwordBool === false){
+                passwordBool = true
+                
+                errorMessages.push(element.msg)
+            }
+
+      
+          });
       }
   };
 
@@ -131,6 +153,7 @@ function FormLogin() {
                               setPassword(e.target.value);
                           }}
                       />
+                      
                   </div>
 
                   <button>Iniciar Sesión</button>
