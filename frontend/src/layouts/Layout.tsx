@@ -104,6 +104,14 @@ const BackgroundView = styled.div`
 
 `
 
+const Url = styled.div`
+    width: 95%;
+    margin: 0 auto;
+    color: var(--grey-1);
+
+    
+`
+
 
 function Layout() {
     const navigate = useNavigate();
@@ -113,6 +121,14 @@ function Layout() {
         navigate("/");
     }
 
+    const url = location.pathname
+
+    let words: Array<string> = []
+
+    words = url.split("/")
+    words.shift()
+
+    console.log(words)
     return (
         <>
             <Flex>
@@ -122,10 +138,10 @@ function Layout() {
                     </Logo>
                     <ul>
                         {userType === 'admin' && (
-                            <MenuDropdown name="Admin Panel" data={[{name:"Admin Settings", link:"admin-settings"}, {name:"User Management",link:"user-management"}]} />
+                            <MenuDropdown name="Admin Panel" data={[{ name: "Admin Settings", link: "admin-settings" }, { name: "User Management", link: "user-management" }]} />
                         )}
-                        <MenuDropdown name="Clientes" data={[{name:"Ver Clientes", link:"get-customers"}, {name:"Opción 2",link:"#"}]} />
-                        <MenuDropdown name="Función 1" data={[{name:"Opción 1", link:"#"}, {name:"Opción 2",link:"#"}]} />
+                        <MenuDropdown name="Clientes" data={[{ name: "Ver Clientes", link: "get-customers" }]} />
+
                     </ul>
                     <ButtonContainer>
                         <button type="submit" onClick={navegarInicio}>Salir</button>
@@ -134,15 +150,21 @@ function Layout() {
                 <BackgroundView>
                     <BackgroundUser>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width="44" height="44" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
                             <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
                         </svg>
                         <Link to="#">{userEmail}</Link>
-                        
+
                     </BackgroundUser>
+
                     <BackgroundOutlet>
-                        <Outlet/>
+                        <Url>
+                            {words.map((value) => (
+                                <Link key={value} to={`/${value}`}>{`${value}`}</Link>
+                            ))}
+                        </Url>
+                        <Outlet />
                     </BackgroundOutlet>
                 </BackgroundView>
             </Flex>

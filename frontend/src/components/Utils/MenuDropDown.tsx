@@ -23,6 +23,10 @@ const Background = styled.div<{ isOpen: boolean }>`
   transition: background-color 0.3s ease;
   border-radius: var(--radius-m);
   margin: 1rem;
+
+  div{
+    text-align: left !important;
+  }
 `;
 
 const OptionsContainer = styled.div`
@@ -33,6 +37,15 @@ const OptionsContainer = styled.div`
   max-height: 0;
   opacity: 0;
   transition: max-height 0.5s ease, opacity 0.5s ease;
+
+
+  a{
+    font-weight: normal !important;
+    font-size: var(--font-size-xxxs);
+    text-align: left;
+
+    margin-left: 1rem;
+  }
 `;
 
 const MenuDropdown: React.FC<MenuDropdownProps> = ({ data, name }) => {
@@ -72,7 +85,7 @@ const MenuDropdown: React.FC<MenuDropdownProps> = ({ data, name }) => {
       </div>
       <OptionsContainer ref={optionsRef}>
         {data.map((item, index) => (
-          <Link key={index} to={item.link}>{item.name}</Link>
+          <Link key={index} to={item.link}>{`> ${item.name}`}</Link>
         ))}
       </OptionsContainer>
     </Background>
