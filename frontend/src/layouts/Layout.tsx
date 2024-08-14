@@ -9,6 +9,11 @@ const BackgroundColumn = styled.div`
    
     flex-basis: max(12%,15rem);
     height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     div{
         h1{
             text-align: center;
@@ -25,6 +30,7 @@ const BackgroundColumn = styled.div`
             text-align: center;
             transition: 0.6s all ease;
             cursor: pointer;
+           
             a{
                 text-decoration: none;
                 color: white;
@@ -63,7 +69,7 @@ const ButtonContainer = styled.div`
     
     position: relative;
     
-    
+    margin-bottom: 2rem;
 
     button{
         color: var(--primary);
@@ -112,37 +118,44 @@ const Url = styled.div`
     
 `
 
+const BackgroundLogoList = styled.div`
+
+
+`
 
 function Layout() {
     const navigate = useNavigate();
-    const { userType, userEmail } = useAuth(); // Obtener el tipo de usuario del contexto
+    const { userType, userEmail, logout } = useAuth(); // Obtener el tipo de usuario del contexto
 
     const navegarInicio = () => {
         navigate("/");
+        logout();
     }
 
-    const url = location.pathname
+    // const url = location.pathname
 
-    let words: Array<string> = []
+    // let words: Array<string> = []
 
-    words = url.split("/")
-    words.shift()
+    // words = url.split("/")
+    // words.shift()
 
-    console.log(words)
+    // console.log(words)
     return (
         <>
             <Flex>
                 <BackgroundColumn>
-                    <Logo>
-                        <Link to="/dashboard">ERP</Link>
-                    </Logo>
-                    <ul>
-                        {userType === 'admin' && (
-                            <MenuDropdown name="Admin Panel" data={[{ name: "Admin Settings", link: "admin-settings" }, { name: "User Management", link: "user-management" }]} />
-                        )}
-                        <MenuDropdown name="Clientes" data={[{ name: "Ver Clientes", link: "get-customers" }]} />
+                    <BackgroundLogoList>
+                        <Logo>
+                            <Link to="/dashboard">VET</Link>
+                        </Logo>
+                        <ul>
+                            {userType === 'admin' && (
+                                <MenuDropdown name="Admin Panel" data={[{ name: "Usuarios", link: "user-settings" }]} />
+                            )}
+                            <MenuDropdown name="Clientes" data={[{ name: "Ver Clientes", link: "get-customers" }]} />
 
-                    </ul>
+                        </ul>
+                    </BackgroundLogoList>
                     <ButtonContainer>
                         <button type="submit" onClick={navegarInicio}>Salir</button>
                     </ButtonContainer>
@@ -159,11 +172,11 @@ function Layout() {
                     </BackgroundUser>
 
                     <BackgroundOutlet>
-                        <Url>
+                        {/* <Url>
                             {words.map((value) => (
                                 <Link key={value} to={`/${value}`}>{`${value}`}</Link>
                             ))}
-                        </Url>
+                        </Url> */}
                         <Outlet />
                     </BackgroundOutlet>
                 </BackgroundView>
