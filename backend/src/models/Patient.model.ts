@@ -37,6 +37,12 @@ class Patients extends Model{
     description: string
 
     @Column({
+        type: DataType.STRING(300),
+        allowNull: true,
+    })
+    img: string
+
+    @Column({
         type: DataType.DATE,
         allowNull: false,
     })

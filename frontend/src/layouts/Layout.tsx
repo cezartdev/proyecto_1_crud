@@ -14,6 +14,8 @@ const BackgroundColumn = styled.div`
     flex-direction: column;
     justify-content: space-between;
 
+
+
     div{
         h1{
             text-align: center;
@@ -43,6 +45,14 @@ const BackgroundColumn = styled.div`
         }
     }
 `
+const BackgroundView = styled.div`
+    
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   
+`
+
 const Flex = styled.div`
     display: flex;
     
@@ -98,8 +108,9 @@ const BackgroundUser = styled.div`
     justify-content: end;
     align-items: center;
     gap: 2rem;
-
     margin: 2rem;
+
+
 
     a{
         text-decoration: none;
@@ -108,24 +119,17 @@ const BackgroundUser = styled.div`
 
 `
 
-const BackgroundView = styled.div`
-    
-   display: flex;
-   flex-direction: column;
-   width: 100%;
 
-`
 
 const Url = styled.div`
-    width: 95%;
-    margin: 0 auto;
-    color: var(--grey-1);
+width: 95%;
+margin: 0 auto;
+color: var(--grey - 1);
 
-    
+
 `
 
 const BackgroundLogoList = styled.div`
-
 
 `
 
@@ -181,7 +185,7 @@ function Layout() {
                     <BackgroundOutlet>
                         {/* <Url>
                             {words.map((value) => (
-                                <Link key={value} to={`/${value}`}>{`${value}`}</Link>
+                                <Link key={value} to={`/ ${ value } `}>{`${ value } `}</Link>
                             ))}
                         </Url> */}
                         <Outlet />
