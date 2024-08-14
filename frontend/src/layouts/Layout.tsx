@@ -24,10 +24,10 @@ const BackgroundColumn = styled.div`
         display: flex;
         flex-direction: column;
         gap: 2rem;
+       
         div{
             
             padding: 1.5rem;
-            text-align: center;
             transition: 0.6s all ease;
             cursor: pointer;
            
@@ -76,6 +76,12 @@ const ButtonContainer = styled.div`
         background-color: white;
         font-weight: bold;
         padding: 0.8rem 5rem;
+
+        transition: 0.7s all ease;
+        &:hover{
+            background-color: var(--primary-alt);
+            color: white;
+        }
     }
 
 `
@@ -149,6 +155,7 @@ function Layout() {
                             <Link to="/dashboard">VET</Link>
                         </Logo>
                         <ul>
+
                             {userType === 'admin' && (
                                 <MenuDropdown name="Admin Panel" data={[{ name: "Usuarios", link: "user-settings" }]} />
                             )}

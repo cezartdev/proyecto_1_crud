@@ -7,7 +7,7 @@ const router = Router()
 
 //tipos de usuario permitidos
 //TODO: Mover esto a una validación mejor
-const type = ["admin", "cliente"]
+const type = ["admin", "veterinario"]
 
 //Routing
 router.post("/create",
