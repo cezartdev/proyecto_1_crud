@@ -129,10 +129,10 @@ function VerClientes() {
                                 <Card
                                     key={cliente.id} // Asegúrate de incluir una clave única para cada Card
                                     title={`${cliente.petname}`}
-                                    msg1={`Codigo: ${cliente.code}`}
-                                    msg2={`Dueño: ${cliente.ownername} ${cliente.ownerlastname}`}
-                                    msg3={`Descripcion: ${cliente.description}`}
-                                    msg4={`Fecha: ${formattedDate}`}
+                                    msg1={`${cliente.code}`}
+                                    msg2={`${cliente.ownername} ${cliente.ownerlastname}`}
+                                    msg3={`${cliente.description}`}
+                                    msg4={`${formattedDate}`}
                                     img={cliente.img}
                                     editable
                                 />

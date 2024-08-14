@@ -42,13 +42,19 @@ export const editPatient = async (req: Request, res: Response) => {
     
     try {
         
-        const code = req.body.code
-
-        const patient = await Patient.findOne({ where: { code} })
+        console.log(req.body)
         
-        console.log(patient)
 
-        res.status(200).json({data: ""})
+        
+
+        res.status(200).json({data: "recibido"})
+        // const code = req.body.code
+
+        // const patient = await Patient.findOne({ where: { code} })
+        
+        // console.log(patient)
+
+        // res.status(200).json({data: "si"})
         
     } catch (error) { 
         res.status(400).json({error})

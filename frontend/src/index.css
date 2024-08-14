@@ -511,3 +511,7 @@ button {
     border-radius: var(--radius-m);
     cursor: pointer;
 }
+
+.ReactModal__Overlay--after-open {
+    background-color: rgba(0, 0, 0, 0.342) !important;
+}
