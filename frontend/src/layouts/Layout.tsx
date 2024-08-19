@@ -7,7 +7,9 @@ import { useAuth } from '../components/AuthContext';
 const BackgroundColumn = styled.div`
     background-color: var(--primary);
    
-    flex-basis: max(12%,15rem);
+    /* flex-basis: max(12%,15rem); */
+
+    width: clamp(5rem, 20vw, 20rem);
     height: 100vh;
 
     display: flex;
@@ -15,6 +17,9 @@ const BackgroundColumn = styled.div`
     justify-content: space-between;
 
 
+    position: fixed;
+
+    z-index: 3;
 
     div{
         h1{
@@ -49,12 +54,19 @@ const BackgroundView = styled.div`
     
    display: flex;
    flex-direction: column;
-   width: 100%;
-   
+
+   position: relative;
+   margin-left:  clamp(5rem, 20vw, 20rem);
+   width:100%;
+
+   z-index: 1;
+  
 `
 
 const Flex = styled.div`
     display: flex;
+    height: 100%;
+    min-height: 100vh;
     
 `
 
@@ -98,7 +110,8 @@ const ButtonContainer = styled.div`
 
 const BackgroundOutlet = styled.div`
     background-color: var(--grey-4);
-    flex-basis: 100%;
+    height: 100%;
+    margin-top: 8vh;
 
 `
 
@@ -108,9 +121,15 @@ const BackgroundUser = styled.div`
     justify-content: end;
     align-items: center;
     gap: 2rem;
-    margin: 2rem;
+ 
 
+    position: fixed;
+    background-color: white;
+    
+    height:8vh;
+    z-index: 2;
 
+    width: calc(100% - clamp(5rem, 20vw, 20rem));
 
     a{
         text-decoration: none;
@@ -119,15 +138,6 @@ const BackgroundUser = styled.div`
 
 `
 
-
-
-const Url = styled.div`
-width: 95%;
-margin: 0 auto;
-color: var(--grey - 1);
-
-
-`
 
 const BackgroundLogoList = styled.div`
 
@@ -142,14 +152,7 @@ function Layout() {
         logout();
     }
 
-    // const url = location.pathname
 
-    // let words: Array<string> = []
-
-    // words = url.split("/")
-    // words.shift()
-
-    // console.log(words)
     return (
         <>
             <Flex>
@@ -171,6 +174,7 @@ function Layout() {
                         <button type="submit" onClick={navegarInicio}>Salir</button>
                     </ButtonContainer>
                 </BackgroundColumn>
+
                 <BackgroundView>
                     <BackgroundUser>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width="44" height="44" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -181,13 +185,7 @@ function Layout() {
                         <Link to="#">{userEmail}</Link>
 
                     </BackgroundUser>
-
                     <BackgroundOutlet>
-                        {/* <Url>
-                            {words.map((value) => (
-                                <Link key={value} to={`/ ${ value } `}>{`${ value } `}</Link>
-                            ))}
-                        </Url> */}
                         <Outlet />
                     </BackgroundOutlet>
                 </BackgroundView>

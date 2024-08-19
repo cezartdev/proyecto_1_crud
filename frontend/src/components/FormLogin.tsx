@@ -174,6 +174,7 @@ function FormLogin() {
                     password,
                 }
             );
+
             console.log(data);
 
             login(data.token, data.response.usertype, data.response.email); // Incluye el tipo de usuario y el email del usuario

@@ -15,11 +15,11 @@ interface MenuDropdownProps {
   name: string;
 }
 
-const Background = styled.div<{ isOpen: boolean }>`
+const Background = styled.div<{ $isOpen: boolean }>`
   position: relative;
   cursor: pointer;
   padding: 1rem;
-  background-color: ${props => (props.isOpen ? 'rgba(0, 0, 0, 0.1)' : 'transparent')}; // Color de fondo del menú
+  background-color: ${props => (props.$isOpen ? 'rgba(0, 0, 0, 0.1)' : 'transparent')}; // Color de fondo del menú
   transition: background-color 0.3s ease;
   border-radius: var(--radius-m);
   margin: 1rem;
@@ -79,7 +79,7 @@ const MenuDropdown: React.FC<MenuDropdownProps> = ({ data, name }) => {
   }, [isOpen]);
 
   return (
-    <Background isOpen={isOpen} onClick={toggleMenu}>
+    <Background $isOpen={isOpen} onClick={toggleMenu}>
       <div>
         <Link to="#">{name}</Link>
       </div>

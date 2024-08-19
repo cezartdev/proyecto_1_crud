@@ -24,7 +24,7 @@ router.post("/create",
     createUser )
 
 
-router.delete("/delete", deleteUser)
+router.delete("/delete",deleteUser)
 router.get("/get", getUser)
 router.get("/get-all", getAllUsers)
 

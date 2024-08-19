@@ -1,49 +1,8 @@
-import styled, { keyframes } from 'styled-components';
-import Card from "../../components/Utils/Card";
+import styled from 'styled-components';
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 
-
-// Definir la animación de parpadeo
-const skeletonLoading = keyframes`
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-`;
-
-// Estilos para el contenedor del Skeleton
-const SkeletonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-// Estilos para los elementos del Skeleton
-const SkeletonElement = styled.div`
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: ${skeletonLoading} 1.5s infinite;
-  border-radius: 4px;
-`;
-
-const SkeletonCard = styled(SkeletonElement)`
-  height: 200px; /* Altura simulada del Card */
-  margin-bottom: 20px;
-`;
-
-const SkeletonTitle = styled(SkeletonElement)`
-  width: 150px;
-  height: 20px;
-`;
-
-const SkeletonText = styled(SkeletonElement)`
-  width: 80%;
-  height: 16px;
-`;
 
 const CardBackground = styled.div`
 
@@ -78,7 +37,7 @@ interface Cliente {
 
 function VerClientes() {
     const [clientes, setClientes] = useState<Cliente[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+
 
     const getClientes = async () => {
         try {
@@ -95,8 +54,6 @@ function VerClientes() {
             }
         } catch (error) {
             console.log(error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -109,39 +66,12 @@ function VerClientes() {
             <Title>Clientes</Title>
 
             <CardBackground>
-                {loading ? (
-                    <SkeletonWrapper>
-                        <SkeletonCard />
-                        <SkeletonTitle />
-                        <SkeletonText />
-                        <SkeletonText />
-                    </SkeletonWrapper>
-                ) : (
-                    Array.isArray(clientes) && clientes.length > 0 ? (
-                        clientes.map((cliente) => {
-                            const formattedDate = new Date(cliente.date).toLocaleDateString('es-ES', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                            });
 
-                            return (
-                                <Card
-                                    key={cliente.id} // Asegúrate de incluir una clave única para cada Card
-                                    title={`${cliente.petname}`}
-                                    msg1={`${cliente.code}`}
-                                    msg2={`${cliente.ownername} ${cliente.ownerlastname}`}
-                                    msg3={`${cliente.description}`}
-                                    msg4={`${formattedDate}`}
-                                    img={cliente.img}
-                                    editable
-                                />
-                            );
-                        })
-                    ) : (
-                        <p>No hay clientes disponibles.</p>
-                    )
-                )}
+
+
+
+
+
             </CardBackground>
         </>
     );
