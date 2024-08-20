@@ -42,16 +42,10 @@ function VerClientes() {
     const getClientes = async () => {
         try {
             const response = await axios.get<{ data: Cliente[] }>(
-                `${import.meta.env.VITE_BACKEND_URL}/api/patient/get-all`
+                `${import.meta.env.VITE_BACKEND_URL}/api/asdasdas`
             );
             const data = response.data.data;
-
-            if (Array.isArray(data)) {
-                setClientes(data);
-            } else {
-                console.error('La respuesta no es un array:', data);
-                setClientes([]);
-            }
+            
         } catch (error) {
             console.log(error);
         }

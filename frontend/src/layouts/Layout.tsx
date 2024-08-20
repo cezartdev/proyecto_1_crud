@@ -159,12 +159,12 @@ function Layout() {
                 <BackgroundColumn>
                     <BackgroundLogoList>
                         <Logo>
-                            <Link to="/dashboard">VET</Link>
+                            <Link to="/dashboard">ERP</Link>
                         </Logo>
                         <ul>
 
                             {userType === 'admin' && (
-                                <MenuDropdown name="Admin Panel" data={[{ name: "Usuarios", link: "user-settings" }]} />
+                                <MenuDropdown name="Usuarios" data={[{ name: "Crear Usuarios", link: "create-user" }]} />
                             )}
                             <MenuDropdown name="Clientes" data={[{ name: "Ver Clientes", link: "get-customers" }]} />
 

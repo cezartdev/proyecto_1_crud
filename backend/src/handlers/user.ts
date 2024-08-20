@@ -1,14 +1,16 @@
 import {Request,Response} from "express"
-import User from "../models/User.model"
+import User from "../models/Users.model"
 import bcrypt from "bcrypt"
 import colors from "colors"
+import Types from "../models/Types.model"
+import Users_Types from "../models/Users_Types.model"
 
 export const createUser = async (req: Request, res: Response) => {
     //Todos los errores a este punto son de Sequelize
     try {
         
         const user = await User.create(req.body)
-        res.json({data: user })
+        res.status(200).json({data: user })
         
     } catch (error) { 
         if(error.name=== "SequelizeUniqueConstraintError"){
@@ -19,7 +21,17 @@ export const createUser = async (req: Request, res: Response) => {
         
         res.status(400).json({error})
     }
-    
+
+}
+
+export const createTypeUser = async (req: Request, res: Response) => {
+    try{
+
+        const typeUser = await Types.create(req.body)
+        res.status(200).json({data: typeUser})
+    }catch(error){
+        res.status(400).json({error})
+    }
 
 }
 
@@ -45,43 +57,45 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const loginValidate = async (req: Request, res: Response) => {
-    // lógica para obtener el usuario
     try {
-        
-        const email = await req.body.email
-        
-        const user = await User.findOne({ where: { email} });
-        //Esto representa los valores del usuario :user.dataValues
-        //Ejemplo del id: user.dataValues.id
+        const { email, password } = req.body;
+
+        // Encuentra el usuario por email
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            const errors = [{msg:"Usuario o contraseña incorrecta"}]
-            return res.status(400).json({errors: errors})
+            const errors = [{ msg: "Usuario o contraseña incorrecta" }];
+            return res.status(400).json({ errors });
         }
 
-        const plainPassword = await req.body.password
+        const hashedPassword = user.dataValues.password;
 
-        const hashedPassword = await user.dataValues.password
+        // Verifica la contraseña
+        const isMatch = await bcrypt.compare(password, hashedPassword);
 
-        const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
-
-        //En este punto isMatch devuelve true si es correcta la contraseña o false si no
-
-        const userType = user.dataValues.type
-        const userEmail = user.dataValues.email
-        if(isMatch){
-            res.status(200).json({response: {usertype: userType, email:userEmail }});
-        }else{
-            // El mismo formato de errores
-            const errors = [{msg:"Usuario o contraseña incorrecta"}]
-            res.status(400).json({errors: errors})
+        if (!isMatch) {
+            const errors = [{ msg: "Usuario o contraseña incorrecta" }];
+            return res.status(400).json({ errors });
         }
-    
+
+        // Obtener el tipo de usuario
+        const userTypeRecord = await Users_Types.findOne({
+            where: { email_users: email },
+            attributes: ['name_type'],
+        });
+
+        let userType = 'Unknown'; // Valor por defecto si no se encuentra el tipo de usuario
+
+        if (userTypeRecord) {
+            userType = userTypeRecord.dataValues.name_type;
+        }
+
+        // Responder con el tipo de usuario y el email
+        res.status(200).json({ response: { userType, email } });
+        
     } catch (error) {
-        console.log(colors.bgRed.white.bold(`${error}`));
-        console.log(colors.bgRed.white.bold(`Error en el login del usuario`))
-        const errors = [{msg:"Error al ingresar"}]
-        res.status(400).json({error: errors})
+        console.error('Error en el login del usuario:', error);
+        const errors = [{ msg: "Error al ingresar" }];
+        res.status(400).json({ errors });
     }
 };
-

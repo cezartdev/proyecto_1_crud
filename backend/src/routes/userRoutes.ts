@@ -1,13 +1,11 @@
 import {Router} from "express"
 import {body} from "express-validator"
-import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate} from "../handlers/user"
-import { handleInputErrors, handlePasswordEncrypt } from "../middleware"
+import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate, createTypeUser} from "../handlers/user"
+import { handleInputErrors, handlePasswordEncrypt, handleUserTypeValidate } from "../middleware"
+
 
 const router = Router()
 
-//tipos de usuario permitidos
-//TODO: Mover esto a una validación mejor
-const type = ["admin", "veterinario"]
 
 //Routing
 router.post("/create",
@@ -17,12 +15,29 @@ router.post("/create",
     body("password")
         .notEmpty().withMessage("La contraseña está vacía"),
     body("type")
-        .notEmpty().withMessage("El tipo de usuario está vacío")
-        .custom(value => type.includes(value)).withMessage("Tipo de usuario no permitido"),
+        .notEmpty().withMessage("El tipo de usuario está vacío"),
     handleInputErrors,
     handlePasswordEncrypt,
+    handleUserTypeValidate,
     createUser )
 
+router.post("/create-type",
+
+    createTypeUser )
+
+
+router.post("/create",
+    body("email")
+        .notEmpty().withMessage("El correo está vacío")
+        .isEmail().withMessage("El correo no está en el formato"),
+    body("password")
+        .notEmpty().withMessage("La contraseña está vacía"),
+    body("type")
+        .notEmpty().withMessage("El tipo de usuario está vacío"),
+    handleInputErrors,
+    handlePasswordEncrypt,
+    handleUserTypeValidate,
+    createUser )
 
 router.delete("/delete",deleteUser)
 router.get("/get", getUser)
