@@ -1,6 +1,8 @@
 
 
-function Card() {
+
+
+function UserCard() {
     return (
         <>
             <h4>card</h4>
@@ -8,4 +10,4 @@ function Card() {
     )
 }
 
-export default Card
+export default UserCard;

@@ -164,9 +164,13 @@ function Layout() {
                         <ul>
 
                             {userType === 'admin' && (
-                                <MenuDropdown name="Usuarios" data={[{ name: "Crear Usuarios", link: "create-user" }]} />
+                                <>
+                                    <MenuDropdown name="Usuarios" data={[{ name: "Permisos Usuarios", link: "permissions-users" }, { name: "Crear Usuarios", link: "create-user" }, { name: "Administrar Usuarios", link: "manage-users" }]} />
+                                    <MenuDropdown name="Facturacion" data={[{ name: "Crear Facturas", link: "create-invoice" }]} />
+                                </>
                             )}
-                            <MenuDropdown name="Clientes" data={[{ name: "Ver Clientes", link: "get-customers" }]} />
+                            <MenuDropdown name="Clientes" data={[{ name: "Crear Cliente", link: "create-user" }, { name: "Ver Clientes", link: "get-customers" }]} />
+                            <MenuDropdown name="Productos" data={[{ name: "Crear Producto", link: "create-product" }]} />
 
                         </ul>
                     </BackgroundLogoList>

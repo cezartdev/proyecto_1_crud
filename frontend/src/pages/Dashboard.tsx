@@ -1,4 +1,3 @@
-import Card from "../components/Utils/Card";
 import styled from "styled-components";
 
 const CardBackground = styled.div`
@@ -31,10 +30,7 @@ function Dashboard() {
 
       <CardBackground>
 
-        <Card title="Uno" msg="Descripcion 1" />
-        <Card title="Dos" msg="Descripcion 2" />
-        <Card title="Tres" msg="Descripcion 3" />
-        <Card title="Cuatro" msg="Descripcion 4" />
+
 
       </CardBackground>
 
