@@ -34,7 +34,7 @@ const BackgroundColumn = styled.div`
        
         div{
             
-            padding: 1.5rem;
+            padding: 1rem;
             transition: 0.6s all ease;
             cursor: pointer;
            
@@ -165,7 +165,7 @@ function Layout() {
 
                             {userType === 'admin' && (
                                 <>
-                                    <MenuDropdown name="Usuarios" data={[{ name: "Permisos Usuarios", link: "permissions-users" }, { name: "Crear Usuarios", link: "create-user" }, { name: "Administrar Usuarios", link: "manage-users" }]} />
+                                    <MenuDropdown name="Usuarios" data={[{ name: "Crear Permisos Usuarios", link: "create-permissions" }, { name: "Administrar Permisos", link: "manage-permissions" }, { name: "Crear Usuarios", link: "create-user" }, { name: "Administrar Usuarios", link: "manage-users" }]} />
                                     <MenuDropdown name="Facturacion" data={[{ name: "Crear Facturas", link: "create-invoice" }]} />
                                 </>
                             )}

@@ -17,12 +17,11 @@ interface MenuDropdownProps {
 
 const Background = styled.div<{ $isOpen: boolean }>`
   position: relative;
-  cursor: pointer;
-  padding: 1rem;
+
   background-color: ${props => (props.$isOpen ? 'rgba(0, 0, 0, 0.1)' : 'transparent')}; // Color de fondo del menú
   transition: background-color 0.3s ease;
-  border-radius: var(--radius-m);
-  margin: 1rem;
+  /* border-radius: var(--radius-m);
+  margin: 1rem; */
 
   div{
     text-align: left !important;
@@ -37,14 +36,23 @@ const OptionsContainer = styled.div`
   max-height: 0;
   opacity: 0;
   transition: max-height 0.5s ease, opacity 0.5s ease;
-
+ 
 
   a{
     font-weight: normal !important;
     font-size: var(--font-size-xxxs);
     text-align: left;
-
     margin-left: 1rem;
+
+    transition: 0.5s all ease;
+    border-radius: var(--radius-m);
+    padding: 1rem;
+
+   
+    &:hover{
+      background-color: rgba(0 0 0 / 10%);
+      
+    }
   }
 `;
 

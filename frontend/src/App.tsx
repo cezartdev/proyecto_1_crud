@@ -22,7 +22,7 @@ const App: React.FC = () => {
                                 <Route index element={<Dashboard />} />
                                 <Route path="get-customers" element={<VerClientes />} />
                                 <Route path="create-user" element={<CrearUsuarios />} />
-                                <Route path="permissions-users" element={<PermisosUsuarios />} />
+                                <Route path="create-permissions" element={<PermisosUsuarios />} />
                             </Route>
                         </Route>
 
