@@ -1,7 +1,6 @@
 import {Request,Response} from "express"
 import User from "../models/Users.model"
 import bcrypt from "bcrypt"
-import colors from "colors"
 import Types from "../models/Types.model"
 import Users_Types from "../models/Users_Types.model"
 
