@@ -183,8 +183,9 @@ function FormLogin() {
             let emailError = "";
             let passwordError = "";
             let otherError = "";
-            console.log(error.response.data);
+
             if (error.response && error.response.data && error.response.data.errors) {
+                console.log(error.response.data);
                 error.response.data.errors.forEach((element: any) => {
                     if (element.path === "email" && !emailError) {
                         emailError = element.msg;

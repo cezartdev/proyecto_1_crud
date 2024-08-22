@@ -7,7 +7,7 @@ import Users from "../models/Users.model";
 import Users_Types from "../models/Users_Types.model";
 
 export const handleInputErrors = async (req: Request, res: Response, next: NextFunction) => {
-
+    
     let errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })

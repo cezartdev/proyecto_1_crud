@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import ErrorMessage from "../../components/Utils/ErrorMessage"
 const Title = styled.h1`
     margin: 0;
 `
@@ -30,14 +31,27 @@ const NameType = styled.div`
 `
 const OptionsPermissions = styled.div`
     display: flex;
-    justify-content: space-between;
-
-  
-    label{
-        p{
-            margin: 0;
+    flex-direction: column;
+    gap: 1rem;
+    h6{
+        font-weight: bold;
+        margin: 0;
+    
+    }
+    div{
+        display: flex;
+        gap: 2rem;
+        label{
+            display: flex;
+            gap: 1rem;
+          
+       
+            p{
+                margin: 0;
+            }
         }
     }
+    
 
 `
 
@@ -69,8 +83,7 @@ const Form = styled.form`
     background-color: white;
     border-radius: var(--radius-m);
     padding: 2rem;
-
-    width: 50%;
+    max-width: 70rem;
 
 
 `
@@ -79,6 +92,17 @@ const Form = styled.form`
 function PermisosUsuarios() {
 
     const [names, setNames] = useState<string[]>([]);
+    const [typeName, setTypeName] = useState<string>("");
+    const [checkboxValues, setCheckboxValues] = useState({
+        customers: false,
+        invoices: false,
+        products: false,
+        users: false
+    });
+    const [errors, setErrors] = useState<{ typeName: string; permissions: string }>({
+        typeName: "",
+        permissions: ""
+    });
 
     const handlePermissions = async () => {
         const { data } = await axios.get(
@@ -93,39 +117,114 @@ function PermisosUsuarios() {
         handlePermissions();
     }, []);
 
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, checked } = e.target;
+        setCheckboxValues(prevState => ({
+            ...prevState,
+            [name]: checked
+        }));
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        const { data } = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/...`
-        );
+        try {
+
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/permission/create`,
+                {
+                    typeName,
+                    customers: checkboxValues.customers,
+                    invoices: checkboxValues.invoices,
+                    products: checkboxValues.products,
+                    users: checkboxValues.users
+
+                }
+            );
+
+        } catch (error: any) {
+            let typeName = "";
+            let otherError = "";
+            let permission = "";
+            if (error.response && error.response.data && error.response.data.errors) {
+                console.log(error.response.data);
+                error.response.data.errors.forEach((element: any) => {
+                    if (element.path === "typeName" && !typeName) {
+                        typeName = element.msg;
+                    }
+
+                    if (element.path === "") {
+
+                        permission = element.msg
+                    }
+
+                    if (element.path === undefined) {
+                        otherError = element.msg;
+                    }
+                });
+
+            }
+
+
+            setErrors({
+                typeName: typeName,
+                permissions: permission
+            });
+
+
+
+        }
 
 
     }
+    const translate: any = {
+        customers: {
+            spanish: "Ver Clientes"
+        },
+        invoices: {
+            spanish: "Ver Facturas"
+        },
+        products: {
+            spanish: "Ver Productos"
+        },
+        users: {
+            spanish: "Ver Usuarios"
+        }
+    }
+
 
     return (
         <>
             <Background>
 
-                <Title>Permisos</Title>
+                <Title>Crear Permisos</Title>
                 <Form onSubmit={handleSubmit}>
                     <NameType>
-                        <label>Rol o tipo de usuario</label>
-                        <input type="text" placeholder="Nombre del tipo de usuario" />
-
+                        <label>Nombre del rol o tipo de usuario</label>
+                        {errors.typeName && <ErrorMessage msg={errors.typeName} />}
+                        <input type="text" placeholder="Nombre del tipo de usuario" onChange={(e) => { setTypeName(e.target.value.toLowerCase()) }} value={typeName.toLowerCase()} />
                     </NameType>
 
                     <OptionsPermissions>
-                        {names.map((name, index) => (
-                            <label key={index}>  {/* Utiliza el `index` como clave */}
-                                <input type="checkbox" id={`check${index}`} name={`${name}`} />
-                                <p>{name}</p>
-                            </label>
-                        ))}
+                        <h6>Permisos</h6>
+                        {errors.permissions && <ErrorMessage msg={errors.permissions} />}
+                        <div>
+                            {Object.keys(checkboxValues).map((name, index) => (
+                                <label key={index}>
+                                    <input
+                                        type="checkbox"
+                                        id={`check${index}`}
+                                        name={name}
+                                        checked={checkboxValues[name as keyof typeof checkboxValues]}
+                                        onChange={handleCheckboxChange}
+                                    />
+                                    <p>{translate[name]?.spanish || name}</p>
+                                </label>
+                            ))}
+                        </div>
                     </OptionsPermissions>
                     <Button>
 
-                        <input type="submit" value={"Enviar"} />
+                        <input type="submit" value={"Crear Tipo de usuario"} />
                     </Button>
                 </Form>
             </Background>
