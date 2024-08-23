@@ -99,9 +99,10 @@ function PermisosUsuarios() {
         products: false,
         users: false
     });
-    const [errors, setErrors] = useState<{ typeName: string; permissions: string }>({
+    const [errors, setErrors] = useState<{ typeName: string; permissions: string, otherError: string }>({
         typeName: "",
-        permissions: ""
+        permissions: "",
+        otherError: ""
     });
 
     const handlePermissions = async () => {
@@ -141,12 +142,14 @@ function PermisosUsuarios() {
                 }
             );
 
+            console.log(data)
+
         } catch (error: any) {
             let typeName = "";
             let otherError = "";
             let permission = "";
             if (error.response && error.response.data && error.response.data.errors) {
-                console.log(error.response.data);
+
                 error.response.data.errors.forEach((element: any) => {
                     if (element.path === "typeName" && !typeName) {
                         typeName = element.msg;
@@ -160,21 +163,22 @@ function PermisosUsuarios() {
                     if (element.path === undefined) {
                         otherError = element.msg;
                     }
+
+
                 });
 
             }
 
+            if (error.response.data.error != undefined) {
+                otherError = error.response.data.error.msg
+            }
 
             setErrors({
                 typeName: typeName,
-                permissions: permission
+                permissions: permission,
+                otherError: otherError
             });
-
-
-
         }
-
-
     }
     const translate: any = {
         customers: {
@@ -195,9 +199,9 @@ function PermisosUsuarios() {
     return (
         <>
             <Background>
-
                 <Title>Crear Permisos</Title>
                 <Form onSubmit={handleSubmit}>
+                    {errors.otherError && <ErrorMessage msg={errors.otherError} />}
                     <NameType>
                         <label>Nombre del rol o tipo de usuario</label>
                         {errors.typeName && <ErrorMessage msg={errors.typeName} />}

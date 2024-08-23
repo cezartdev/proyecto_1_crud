@@ -12,14 +12,14 @@ class Types_Permissions extends Model {
         type: DataType.STRING(100),
         allowNull: false,
     })
-    name_permissions: string;
+    declare name_permissions: string;
 
     @ForeignKey(() => Types)
     @Column({
         type: DataType.STRING(70),
         allowNull: false,
     })
-    name_type: string;
+    declare name_type: string;
 }
 
 export default Types_Permissions;

@@ -11,7 +11,7 @@ class Permissions extends Model {
         type: DataType.STRING(100),
         allowNull: false,
     })
-    name: string;
+    declare name: string;
 
 
     @HasMany(() => Types_Permissions, 'name_permissions')

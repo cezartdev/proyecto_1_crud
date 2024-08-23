@@ -12,13 +12,13 @@ class Types extends Model {
         type: DataType.STRING(70),
         allowNull: false,
     })
-    name: string;
+    declare name: string;
 
     @HasMany(() => Users_Types, 'name_type')
-    userTypes: Users_Types[];
+    declare userTypes: Users_Types[];
 
     @HasMany(() => Types_Permissions, 'name_type')
-    typePermissions: Types_Permissions[];
+    declare typePermissions: Types_Permissions[];
 
 }
 export default Types;

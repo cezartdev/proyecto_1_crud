@@ -7,7 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./components/AuthContext";
 import VerClientes from "./pages/clientes/VerClientes";
 import CrearUsuarios from "./pages/usuarios/CrearUsuarios";
-import PermisosUsuarios from "./pages/usuarios/PermisosUsuarios";
+import CreatePermisosUsuarios from "./pages/usuarios/CrearPermisosUsuarios";
 const App: React.FC = () => {
     return (
         <AuthProvider>
@@ -22,7 +22,7 @@ const App: React.FC = () => {
                                 <Route index element={<Dashboard />} />
                                 <Route path="get-customers" element={<VerClientes />} />
                                 <Route path="create-user" element={<CrearUsuarios />} />
-                                <Route path="create-permissions" element={<PermisosUsuarios />} />
+                                <Route path="create-permissions" element={<CreatePermisosUsuarios />} />
                             </Route>
                         </Route>
 
