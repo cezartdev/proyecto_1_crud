@@ -1,19 +1,19 @@
-import {Request,Response} from "express"
+import { Request, Response } from "express"
 import Permissions from "../models/Permissions.model"
 import Types from "../models/Types.model";
 import Types_Permissions from "../models/Types_Permissions.model";
 
 export const getPermissions = async (req: Request, res: Response) => {
-   
+
     try {
-        
+
         const permissions = await Permissions.findAll();
-        res.status(200).json({data: permissions })
-        
-    } catch (error) { 
-        
+        res.status(200).json({ data: permissions })
+
+    } catch (error) {
+
         console.log(error)
-        res.status(400).json({error})
+        res.status(400).json({ error })
     }
 
 }
@@ -50,14 +50,15 @@ export const create = async (req: Request, res: Response) => {
         if (products) await createTypePermission('products');
         if (users) await createTypePermission('users');
 
-        res.status(200).json({ response: {msg: "Rol o tipo de usuario creado correctamente"} });
+        res.status(200).json({ response: { msg: "Rol o tipo de usuario creado correctamente" } });
 
     } catch (error) {
 
-        if(error.name === "SequelizeUniqueConstraintError"){
+        if (error.name === "SequelizeUniqueConstraintError") {
             error.msg = "El tipo de usuario ya existe"
         }
         console.log(error);
         res.status(400).json({ error });
     }
 }
+

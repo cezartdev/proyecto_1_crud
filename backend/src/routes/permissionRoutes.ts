@@ -7,6 +7,7 @@ import { handleInputErrors } from "../middleware"
 const router = Router()
 
 router.get("/get-all", getPermissions)
+
 router.post("/create",
     body("typeName")
     .notEmpty().withMessage("El nombre del tipo de usuario esta vacío")
