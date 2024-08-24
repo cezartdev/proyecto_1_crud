@@ -11,6 +11,7 @@ import CreatePermisosUsuarios from "./pages/usuarios/CrearPermisosUsuarios";
 import AdministrarPermisos from "./pages/usuarios/AdministrarPermisos";
 import Productos from "./pages/productos/Productos";
 import Facturas from "./pages/facturas/Facturas";
+import AdministrarUsuarios from "./pages/usuarios/AdministrarUsuarios";
 const App: React.FC = () => {
     return (
         <AuthProvider>
@@ -29,6 +30,7 @@ const App: React.FC = () => {
                                 <Route path="manage-permissions" element={<AdministrarPermisos />} />
                                 <Route path="create-product" element={<Productos />} />
                                 <Route path="create-invoice" element={<Facturas />} />
+                                <Route path="manage-users" element={<AdministrarUsuarios />} />
                             </Route>
                         </Route>
 

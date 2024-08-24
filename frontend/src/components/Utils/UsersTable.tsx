@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 
 const Background = styled.div`
     width: min(120rem, 100%);
@@ -28,9 +27,8 @@ const Background = styled.div`
     }
 `;
 
-export default function DataTable() {
+export default function UsersTable() {
     const [data, setData] = useState<any[]>([]);
-    const [searchQuery, setSearchQuery] = useState(''); // Estado para la búsqueda
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [selectedRow, setSelectedRow] = useState<any>(null);
@@ -38,7 +36,6 @@ export default function DataTable() {
     const [dataAllPermissions, setDataAllPermissions] = useState<any[]>([]);
     const [userPermissions, setUserPermissions] = useState<{ [key: string]: boolean }>({});
     const [isDeleted, setIsDeleted] = useState(false);
-
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
             .then((response) => {
@@ -54,19 +51,13 @@ export default function DataTable() {
             });
     }, [isDeleted]);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-    };
-
-    const filteredData = data.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
+    // Funciones para abrir/cerrar el modal de edición
     const handleOpenEditModal = (row: any) => {
         setSelectedRow(row);
         setOpenEdit(true);
-        handleAllPermissions();
-        handleLoadingPermissions(row);
+        handleAllPermissions(); //Todos los permisos
+        handleLoadingPermissions(row); //Permisos del tipo
+
     };
 
     const handleCloseEditModal = () => {
@@ -75,6 +66,7 @@ export default function DataTable() {
         setUserPermissions({});
     };
 
+    // Funciones para abrir/cerrar el modal de eliminación
     const handleOpenDeleteModal = (row: any) => {
         setSelectedRow(row);
         setOpenDelete(true);
@@ -85,12 +77,18 @@ export default function DataTable() {
         setSelectedRow(null);
     };
 
+    // Función para manejar la eliminación (aquí puedes hacer una solicitud a tu API)
     const handleDelete = () => {
+        // Aquí iría la lógica para eliminar el tipo de usuario seleccionado
+        //console.log("Eliminando el tipo de usuario:", selectedRow);
         if (!selectedRow) return;
         axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/type/delete/${selectedRow.name}`)
             .then((response) => {
-                setIsDeleted(true);
-                setSelectedRow(null);
+
+                console.log(response.data.data)
+                setIsDeleted(true); // Actualiza el estado para desencadenar useEffect
+                setSelectedRow(null); // Resetea la fila seleccionada
+
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -99,6 +97,7 @@ export default function DataTable() {
         handleCloseDeleteModal();
     };
 
+    //Estos son los permisos de un tipo especifico
     const handleLoadingPermissions = (row: any) => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${row?.name}`)
             .then((response) => {
@@ -115,42 +114,25 @@ export default function DataTable() {
     };
 
     const handleAllPermissions = () => {
+
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/permission/get-all`)
             .then((response) => {
+                // const data = response.data.data;
+
                 const dataPermissions = response.data.data.map((item: any, index: number) => ({
                     id: index,
                     ...item
                 }));
+
                 setDataAllPermissions(dataPermissions);
+
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
+
     };
 
-    const handleCheckboxChange = (name: string) => {
-        setUserPermissions(prevState => ({
-            ...prevState,
-            [name]: !prevState[name],
-        }));
-    };
-
-    const handleEditSubmit = () => {
-        const selectedPermissions = Object.keys(userPermissions).filter(permission => userPermissions[permission]);
-
-        const payload = {
-            typeName: selectedRow?.name,
-            permissions: selectedPermissions
-        };
-
-        axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/type/edit-permissions`, payload)
-            .then((response) => {
-                handleCloseEditModal();
-            })
-            .catch(error => {
-                console.error("Error actualizando los permisos:", error);
-            });
-    };
 
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Nombre', width: 150 },
@@ -199,17 +181,39 @@ export default function DataTable() {
         }
     }
 
+    const handleCheckboxChange = (name: string) => {
+        setUserPermissions(prevState => ({
+            ...prevState,
+            [name]: !prevState[name],
+        }));
+    };
+
+    const handleEditSubmit = () => {
+        // Recolecta los nombres de los permisos que están marcados
+        const selectedPermissions = Object.keys(userPermissions).filter(permission => userPermissions[permission]);
+
+        // Prepara el payload para enviar en la solicitud PATCH
+        const payload = {
+            typeName: selectedRow?.name, // Puedes enviar el nombre del tipo de usuario si es necesario
+            permissions: selectedPermissions // Envía los nombres de los permisos seleccionados
+        };
+
+        // Realiza la solicitud PATCH para actualizar los permisos
+        axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/type/edit-permissions`, payload)
+            .then((response) => {
+                console.log("Permisos actualizados correctamente:", response.data);
+                // Puedes agregar alguna lógica adicional aquí, como cerrar el modal o actualizar la tabla de datos
+                handleCloseEditModal();
+            })
+            .catch(error => {
+                console.error("Error actualizando los permisos:", error);
+            });
+    };
+
     return (
         <Background>
-            <TextField
-                label="Buscar por nombre"
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                sx={{ marginBottom: "1rem" }}
-            />
             <DataGrid
-                rows={filteredData}
+                rows={data}
                 columns={columns}
                 initialState={{
                     pagination: {
@@ -217,7 +221,9 @@ export default function DataTable() {
                     },
                 }}
                 pageSizeOptions={[5]}
+            // Eliminar checkboxSelection para quitar los checkboxes
             />
+            {/* Modal de edición */}
             <Modal
                 open={openEdit}
                 onClose={handleCloseEditModal}
@@ -242,7 +248,9 @@ export default function DataTable() {
                     <h2 id="modal-modal-title">Editar Rol de "{selectedRow?.name}"</h2>
                     <p id="modal-modal-description">
                         Aquí puedes editar las propiedades del elemento seleccionado.
+
                     </p>
+                    {/* Recorre e imprime los valores de dataPermissions */}
                     <div>
                         <h3>Permisos:</h3>
                         {dataAllPermissions.length > 0 ? (
@@ -267,8 +275,10 @@ export default function DataTable() {
                     </div>
                     <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
                     <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseEditModal}>Cerrar</Button>
+
                 </Box>
             </Modal>
+            {/* Modal de confirmación de eliminación */}
             <Modal
                 open={openDelete}
                 onClose={handleCloseDeleteModal}
@@ -296,6 +306,7 @@ export default function DataTable() {
                         variant="contained"
                         color="secondary"
                         onClick={handleDelete}
+                        sx={{ mr: 2 }}
                     >
                         Eliminar
                     </Button>
