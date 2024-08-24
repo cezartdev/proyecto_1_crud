@@ -7,8 +7,14 @@ import Users_Types from "../models/Users_Types.model"
 export const createUser = async (req: Request, res: Response) => {
     //Todos los errores a este punto son de Sequelize
     try {
-        
-        const user = await User.create(req.body)
+        console.log(req.body)
+        const {name,email,password,type} = req.body
+
+        const user = await User.create({email:email,name:name,password:password})
+  
+
+        await Users_Types.create({email_users: email, name_type:type })
+
         res.status(200).json({data: user })
         
     } catch (error) { 
@@ -23,16 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 }
 
-export const createTypeUser = async (req: Request, res: Response) => {
-    try{
 
-        const typeUser = await Types.create(req.body)
-        res.status(200).json({data: typeUser})
-    }catch(error){
-        res.status(400).json({error})
-    }
-
-}
 
 export const getUser = async (req: Request, res: Response) => {
     

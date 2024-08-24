@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import MenuDropdown from "../components/Utils/MenuDropDown";
 import { useAuth } from '../components/AuthContext';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const BackgroundColumn = styled.div`
     background-color: var(--primary);
@@ -154,6 +156,22 @@ function Layout() {
     }
 
 
+    const [permissions, setPermissions]: any = useState([]);
+
+    //Falta denegar el acceso a ciertos links
+
+    useEffect(() => {
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${userType}`)
+            .then((response) => {
+                console.log(response.data.data)
+                const permissions = response.data.data.map((value: any) => value.name_permissions);
+                setPermissions(permissions)
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }, [])
+
     return (
         <>
             <Flex>
@@ -163,15 +181,33 @@ function Layout() {
                             <Link to="/dashboard">ERP</Link>
                         </Logo>
                         <ul>
-
-                            {userType === 'admin' && (
+                            {permissions.includes("users") && (
                                 <>
                                     <MenuDropdown name="Usuarios" data={[{ name: "Crear Permisos Usuarios", link: "create-permissions" }, { name: "Administrar Permisos", link: "manage-permissions" }, { name: "Crear Usuarios", link: "create-user" }, { name: "Administrar Usuarios", link: "manage-users" }]} />
-                                    <MenuDropdown name="Facturacion" data={[{ name: "Crear Facturas", link: "create-invoice" }]} />
                                 </>
                             )}
-                            <MenuDropdown name="Clientes" data={[{ name: "Crear Cliente", link: "create-user" }, { name: "Ver Clientes", link: "get-customers" }]} />
-                            <MenuDropdown name="Productos" data={[{ name: "Crear Producto", link: "create-product" }]} />
+
+                            {
+                                permissions.includes("invoices") && (
+                                    <>
+                                        <MenuDropdown name="Facturacion" data={[{ name: "Crear Facturas", link: "create-invoice" }]} />
+                                    </>
+                                )
+                            }
+                            {
+                                permissions.includes("customers") && (
+                                    <>
+                                        <MenuDropdown name="Clientes" data={[{ name: "Crear Cliente", link: "create-customer" }, { name: "Ver Clientes", link: "get-customers" }]} />
+                                    </>
+                                )
+                            }
+                            {
+                                permissions.includes("products") && (
+                                    <>
+                                        <MenuDropdown name="Productos" data={[{ name: "Crear Producto", link: "create-product" }]} />
+                                    </>
+                                )
+                            }
 
                         </ul>
                     </BackgroundLogoList>

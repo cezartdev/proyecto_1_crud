@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {body} from "express-validator"
-import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate, createTypeUser} from "../handlers/user"
+import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate} from "../handlers/user"
 import { handleInputErrors, handlePasswordEncrypt, handleUserTypeValidate } from "../middleware"
 
 
@@ -9,6 +9,8 @@ const router = Router()
 
 //Routing
 router.post("/create",
+    body("name")
+        .notEmpty().withMessage("El nombre esta vacio"),
     body("email")
         .notEmpty().withMessage("El correo está vacío")
         .isEmail().withMessage("El correo no está en el formato"),
@@ -21,9 +23,7 @@ router.post("/create",
     handleUserTypeValidate,
     createUser )
 
-router.post("/create-type",
 
-    createTypeUser )
 
 
 router.post("/create",

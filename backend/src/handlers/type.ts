@@ -3,6 +3,7 @@ import Permissions from "../models/Permissions.model"
 import Types from "../models/Types.model";
 import Types_Permissions from "../models/Types_Permissions.model";
 import { where } from "sequelize";
+import { body } from "express-validator";
 
 export const getAllTypes = async (req: Request, res: Response) => {
 
@@ -34,7 +35,7 @@ export const editTypePermissions = async (req: Request, res: Response) => {
     try {
         const typeName = req.body.typeName;
         const newPermissions: Array<string> = req.body.permissions;
-
+       
         // Elimina las relaciones actuales entre el tipo y los permisos
         await Types_Permissions.destroy({ where: { name_type: typeName } });
 
