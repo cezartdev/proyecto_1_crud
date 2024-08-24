@@ -32,6 +32,9 @@ export default function DataTable() {
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [selectedRow, setSelectedRow] = useState<any>(null);
+    const [dataPermissions, setDataPermissions] = useState<any[]>([]);
+    const [dataAllPermissions, setDataAllPermissions] = useState<any[]>([]);
+    const [userPermissions, setUserPermissions] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
@@ -51,11 +54,15 @@ export default function DataTable() {
     const handleOpenEditModal = (row: any) => {
         setSelectedRow(row);
         setOpenEdit(true);
+        handleAllPermissions(); //Todos los permisos
+        handleLoadingPermissions(row); //Permisos del tipo
+
     };
 
     const handleCloseEditModal = () => {
         setOpenEdit(false);
         setSelectedRow(null);
+        setUserPermissions({});
     };
 
     // Funciones para abrir/cerrar el modal de eliminación
@@ -75,6 +82,43 @@ export default function DataTable() {
         console.log("Eliminando el tipo de usuario:", selectedRow);
         handleCloseDeleteModal();
     };
+
+    //Estos son los permisos de un tipo especifico
+    const handleLoadingPermissions = (row: any) => {
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${row?.name}`)
+            .then((response) => {
+                const permissions = response.data.data.reduce((acc: any, item: any) => {
+                    acc[item.name_permissions] = true;
+                    return acc;
+                }, {});
+                setUserPermissions(permissions);
+                setDataPermissions(response.data.data);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
+    const handleAllPermissions = () => {
+
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/permission/get-all`)
+            .then((response) => {
+                // const data = response.data.data;
+
+                const dataPermissions = response.data.data.map((item: any, index: number) => ({
+                    id: index,
+                    ...item
+                }));
+
+                setDataAllPermissions(dataPermissions);
+
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
+    };
+
 
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Nombre', width: 150 },
@@ -108,6 +152,50 @@ export default function DataTable() {
         },
     ];
 
+    const translate: any = {
+        customers: {
+            spanish: "Ver Clientes"
+        },
+        invoices: {
+            spanish: "Ver Facturas"
+        },
+        products: {
+            spanish: "Ver Productos"
+        },
+        users: {
+            spanish: "Ver Usuarios"
+        }
+    }
+
+    const handleCheckboxChange = (name: string) => {
+        setUserPermissions(prevState => ({
+            ...prevState,
+            [name]: !prevState[name],
+        }));
+    };
+
+    const handleEditSubmit = () => {
+        // Recolecta los nombres de los permisos que están marcados
+        const selectedPermissions = Object.keys(userPermissions).filter(permission => userPermissions[permission]);
+
+        // Prepara el payload para enviar en la solicitud PATCH
+        const payload = {
+            typeName: selectedRow?.name, // Puedes enviar el nombre del tipo de usuario si es necesario
+            permissions: selectedPermissions // Envía los nombres de los permisos seleccionados
+        };
+
+        // Realiza la solicitud PATCH para actualizar los permisos
+        axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/type/edit-permissions`, payload)
+            .then((response) => {
+                console.log("Permisos actualizados correctamente:", response.data);
+                // Puedes agregar alguna lógica adicional aquí, como cerrar el modal o actualizar la tabla de datos
+                handleCloseEditModal();
+            })
+            .catch(error => {
+                console.error("Error actualizando los permisos:", error);
+            });
+    };
+
     return (
         <Background>
             <DataGrid
@@ -119,7 +207,7 @@ export default function DataTable() {
                     },
                 }}
                 pageSizeOptions={[5]}
-                // Eliminar checkboxSelection para quitar los checkboxes
+            // Eliminar checkboxSelection para quitar los checkboxes
             />
             {/* Modal de edición */}
             <Modal
@@ -134,18 +222,46 @@ export default function DataTable() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: 400,
+                        width: "80vw",
+                        maxWidth: "80rem",
+                        height: "80vh",
                         bgcolor: 'background.paper',
-                        border: '2px solid #000',
+                        borderRadius: "var(--radius-m)",
                         boxShadow: 24,
                         p: 4,
                     }}
                 >
-                    <h2 id="modal-modal-title">Editar {selectedRow?.name}</h2>
+                    <h2 id="modal-modal-title">Editar Rol de "{selectedRow?.name}"</h2>
                     <p id="modal-modal-description">
                         Aquí puedes editar las propiedades del elemento seleccionado.
+
                     </p>
-                    <Button onClick={handleCloseEditModal}>Cerrar</Button>
+                    {/* Recorre e imprime los valores de dataPermissions */}
+                    <div>
+                        <h3>Permisos:</h3>
+                        {dataAllPermissions.length > 0 ? (
+                            <ul>
+                                {dataAllPermissions.map((permission, index) => (
+                                    <li key={index}>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={!!userPermissions[permission.name]}
+                                                onChange={() => handleCheckboxChange(permission.name)}
+                                            />
+                                            {" "}
+                                            {translate[permission.name]?.spanish || permission.name}
+                                        </label>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No hay permisos disponibles o se están cargando.</p>
+                        )}
+                    </div>
+                    <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
+                    <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseEditModal}>Cerrar</Button>
+
                 </Box>
             </Modal>
             {/* Modal de confirmación de eliminación */}

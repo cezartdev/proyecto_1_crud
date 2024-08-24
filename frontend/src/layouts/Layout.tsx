@@ -121,7 +121,7 @@ const BackgroundUser = styled.div`
     justify-content: end;
     align-items: center;
     gap: 2rem;
- 
+    
 
     position: fixed;
     background-color: white;
@@ -134,6 +134,7 @@ const BackgroundUser = styled.div`
     a{
         text-decoration: none;
         color: var(--primary-alt);
+        margin-right: 2rem;
     }
 
 `
