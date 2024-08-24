@@ -35,7 +35,7 @@ export default function DataTable() {
     const [dataPermissions, setDataPermissions] = useState<any[]>([]);
     const [dataAllPermissions, setDataAllPermissions] = useState<any[]>([]);
     const [userPermissions, setUserPermissions] = useState<{ [key: string]: boolean }>({});
-
+    const [isDeleted, setIsDeleted] = useState(false);
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
             .then((response) => {
@@ -44,11 +44,12 @@ export default function DataTable() {
                     ...item
                 }));
                 setData(dataWithId);
+                setIsDeleted(false);
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-    }, []);
+    }, [isDeleted]);
 
     // Funciones para abrir/cerrar el modal de edición
     const handleOpenEditModal = (row: any) => {
@@ -79,7 +80,20 @@ export default function DataTable() {
     // Función para manejar la eliminación (aquí puedes hacer una solicitud a tu API)
     const handleDelete = () => {
         // Aquí iría la lógica para eliminar el tipo de usuario seleccionado
-        console.log("Eliminando el tipo de usuario:", selectedRow);
+        //console.log("Eliminando el tipo de usuario:", selectedRow);
+        if (!selectedRow) return;
+        axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/type/delete/${selectedRow.name}`)
+            .then((response) => {
+
+                console.log(response.data.data)
+                setIsDeleted(true); // Actualiza el estado para desencadenar useEffect
+                setSelectedRow(null); // Resetea la fila seleccionada
+
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
         handleCloseDeleteModal();
     };
 
