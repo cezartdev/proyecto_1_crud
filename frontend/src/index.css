@@ -518,6 +518,7 @@ button {
 
 #modal-modal-title {
     text-align: center;
+    margin: 1rem 0;
 }
 
 #modal-modal-description {

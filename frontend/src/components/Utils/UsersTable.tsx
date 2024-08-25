@@ -261,6 +261,7 @@ export default function DataTable() {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         width: "70vw",
+                        maxWidth: "70rem",
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,
