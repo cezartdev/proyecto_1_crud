@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Dropdown from './Dropdown';
 
 const Background = styled.div`
     width: min(120rem, 100%);
@@ -26,9 +27,6 @@ const Background = styled.div`
     .css-levciy-MuiTablePagination-displayedRows {
         font-size: 1.2rem;
     }
-
-    
-    
 `;
 
 const StyledTextField = styled(TextField)({
@@ -54,39 +52,57 @@ const StyledTextField = styled(TextField)({
     },
     '& .MuiInputLabel-root.Mui-focused, .MuiOutlinedInput-root:hover .MuiInputLabel-root': {
         color: 'var(--primary)',
-        transform: 'translate(50px, -10px) scale(0.8)',
+        transform: 'translate(10px, -18px) scale(0.8)',
     },
     '& .MuiOutlinedInput-input': {
         padding: '12px 14px',
     },
 });
 
-
 export default function DataTable() {
     const [data, setData] = useState<any[]>([]);
-    const [searchQuery, setSearchQuery] = useState(''); // Estado para la búsqueda
+    const [userRoles, setUserRoles] = useState<Record<string, string>>({});
+    const [searchQuery, setSearchQuery] = useState('');
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [selectedRow, setSelectedRow] = useState<any>(null);
-    const [dataPermissions, setDataPermissions] = useState<any[]>([]);
-    const [dataAllPermissions, setDataAllPermissions] = useState<any[]>([]);
-    const [userPermissions, setUserPermissions] = useState<{ [key: string]: boolean }>({});
     const [isDeleted, setIsDeleted] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+    const [newName, setNewName] = useState<string>('');
+    const [newEmail, setNewEmail] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/get-all`)
             .then((response) => {
-                const dataWithId = response.data.data.map((item: any, index: number) => ({
+                const users = response.data.data;
+                const dataWithId = users.map((item: any, index: number) => ({
                     id: index,
                     ...item
                 }));
                 setData(dataWithId);
                 setIsDeleted(false);
+                setIsUpdate(false);
+
+                // Obtener roles para cada usuario
+                users.forEach((user: any) => {
+                    axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/get-type/${user.email}`)
+                        .then(roleResponse => {
+                            const userType = roleResponse.data.data[0]?.name_type || "Sin Rol";
+                            setUserRoles(prevRoles => ({
+                                ...prevRoles,
+                                [user.email]: userType,
+                            }));
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching role for ${user.email}:`, error);
+                        });
+                });
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-    }, [isDeleted]);
+    }, [isDeleted, isUpdate]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -98,15 +114,15 @@ export default function DataTable() {
 
     const handleOpenEditModal = (row: any) => {
         setSelectedRow(row);
+        setNewName('');
+        setNewEmail('');
+        setNewPassword('');
         setOpenEdit(true);
-        handleAllPermissions();
-        handleLoadingPermissions(row);
     };
 
     const handleCloseEditModal = () => {
         setOpenEdit(false);
         setSelectedRow(null);
-        setUserPermissions({});
     };
 
     const handleOpenDeleteModal = (row: any) => {
@@ -116,79 +132,54 @@ export default function DataTable() {
 
     const handleCloseDeleteModal = () => {
         setOpenDelete(false);
+        setIsUpdate(false);
         setSelectedRow(null);
     };
 
     const handleDelete = () => {
         if (!selectedRow) return;
-        axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/type/delete/${selectedRow.name}`)
-            .then((response) => {
+        axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/user/delete/${selectedRow.email}`)
+            .then(() => {
                 setIsDeleted(true);
                 setSelectedRow(null);
             })
             .catch(error => {
-                console.error("Error fetching data:", error);
+                console.error("Error deleting user:", error);
             });
 
         handleCloseDeleteModal();
     };
 
-    const handleLoadingPermissions = (row: any) => {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${row?.name}`)
-            .then((response) => {
-                const permissions = response.data.data.reduce((acc: any, item: any) => {
-                    acc[item.name_permissions] = true;
-                    return acc;
-                }, {});
-                setUserPermissions(permissions);
-                setDataPermissions(response.data.data);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    };
-
-    const handleAllPermissions = () => {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/permission/get-all`)
-            .then((response) => {
-                const dataPermissions = response.data.data.map((item: any, index: number) => ({
-                    id: index,
-                    ...item
-                }));
-                setDataAllPermissions(dataPermissions);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    };
-
-    const handleCheckboxChange = (name: string) => {
-        setUserPermissions(prevState => ({
-            ...prevState,
-            [name]: !prevState[name],
-        }));
-    };
-
     const handleEditSubmit = () => {
-        const selectedPermissions = Object.keys(userPermissions).filter(permission => userPermissions[permission]);
-
         const payload = {
-            typeName: selectedRow?.name,
-            permissions: selectedPermissions
+            email: selectedRow?.email,
+            newName: newName || selectedRow?.name, // Si no se ha actualizado, utiliza el valor actual
+            newEmail: newEmail || selectedRow?.email,
+            newPassword: newPassword || null,
+            newType: type || selectedRow?.name_type // Asegúrate de enviar el tipo de usuario
         };
 
-        axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/type/edit-permissions`, payload)
-            .then((response) => {
+        axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/user/edit-user`, payload)
+            .then(() => {
                 handleCloseEditModal();
+                setIsUpdate(true);
             })
             .catch(error => {
-                console.error("Error actualizando los permisos:", error);
+                console.error("Error updating user:", error);
             });
     };
 
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Nombre', width: 150 },
-        { field: 'email', headerName: 'Correo', width: 150 },
+        { field: 'email', headerName: 'Correo', width: 250 },
+        {
+            field: 'role',
+            headerName: 'Rol',
+            width: 150,
+            renderCell: (params) => (
+                <span>{userRoles[params.row.email] || 'Cargando...'}</span>
+            ),
+        },
         {
             field: 'edit',
             headerName: 'Editar',
@@ -220,22 +211,23 @@ export default function DataTable() {
             ),
         },
     ];
+    const [options, setOptions] = useState<string[]>([]);
+    const [type, setType] = useState<string>('');
 
-    const translate: any = {
-        customers: {
-            spanish: "Ver Clientes"
-        },
-        invoices: {
-            spanish: "Ver Facturas"
-        },
-        products: {
-            spanish: "Ver Productos"
-        },
-        users: {
-            spanish: "Ver Usuarios"
-        }
-    }
+    useEffect(() => {
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
+            .then((response) => {
+                const optionsArray = response.data.data.map((value: any) => value.name);
+                setOptions(optionsArray);
 
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }, []);
+    const handleDropdownSelect = (selectedOption: string) => {
+        setType(selectedOption);
+    };
     return (
         <Background>
             <StyledTextField
@@ -268,9 +260,7 @@ export default function DataTable() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: "80vw",
-                        maxWidth: "80rem",
-                        height: "80vh",
+                        width: "70vw",
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,
@@ -278,30 +268,61 @@ export default function DataTable() {
                     }}
                 >
                     <h2 id="modal-modal-title">Editar Usuario "{selectedRow?.name}"</h2>
-                    <p id="modal-modal-description">
-                        Aquí puedes editar las propiedades del elemento seleccionado.
-                    </p>
-                    <div id='modal-permissions-div'>
-                        <h3>Permisos</h3>
-                        {dataAllPermissions.length > 0 ? (
-                            <ul>
-                                {dataAllPermissions.map((permission, index) => (
-                                    <li key={index}>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={!!userPermissions[permission.name]}
-                                                onChange={() => handleCheckboxChange(permission.name)}
-                                            />
-                                            {" "}
-                                            {translate[permission.name]?.spanish || permission.name}
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No hay permisos disponibles o se están cargando.</p>
-                        )}
+                    <div>
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Nombre Actual"
+                            value={selectedRow?.name}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Correo Actual"
+                            value={selectedRow?.email}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Rol Actual"
+                            value={userRoles[selectedRow?.email] || 'Cargando...'}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                        <StyledTextField
+                            fullWidth
+                            margin="normal"
+                            label="Nuevo Nombre"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                        />
+                        <StyledTextField
+                            fullWidth
+                            margin="normal"
+                            label="Nuevo Correo"
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
+                        />
+                        <StyledTextField
+                            fullWidth
+                            margin="normal"
+                            label="Nueva Contraseña"
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        <Dropdown
+                            label="Nuevo Rol o tipo de usuario:"
+                            options={options}
+                            onSelect={handleDropdownSelect}
+                        />
                     </div>
                     <div id='modal-buttons-div'>
                         <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
@@ -309,11 +330,12 @@ export default function DataTable() {
                     </div>
                 </Box>
             </Modal>
+
             <Modal
                 open={openDelete}
                 onClose={handleCloseDeleteModal}
-                aria-labelledby="modal-delete-title"
-                aria-describedby="modal-delete-description"
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
             >
                 <Box
                     sx={{
@@ -321,35 +343,29 @@ export default function DataTable() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: "70vw",
-                        height: "50vh",
+                        width: "50vw",
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,
                         p: 4,
                     }}
                 >
-                    <h2 id="modal-delete-title">¿Estás seguro?</h2>
-                    <p id="modal-delete-description">
-                        ¿Estás seguro de que quieres eliminar este tipo de usuario?
-                    </p>
-                    <Button
-                        id='button-edit-2'
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleDelete}
-                        sx={{ backgroundColor: "var(--primary)", mr: "2rem" }}
-                    >
-                        Eliminar
-                    </Button>
-                    <Button
-                        id='button-delete-2'
-                        variant="contained"
-                        onClick={handleCloseDeleteModal}
-                        sx={{ backgroundColor: "red" }}
-                    >
-                        Cancelar
-                    </Button>
+                    <h2 id="modal-modal-title">Eliminar Usuario "{selectedRow?.name}"</h2>
+                    <div>
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Correo"
+                            value={selectedRow?.email}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </div>
+                    <div id='modal-buttons-div'>
+                        <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleDelete}>Eliminar</Button>
+                        <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseDeleteModal}>Cancelar</Button>
+                    </div>
                 </Box>
             </Modal>
         </Background>

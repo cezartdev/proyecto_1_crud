@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {body} from "express-validator"
-import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate} from "../handlers/user"
+import {createUser, getUser,updateUser,deleteUser,getAllUsers, loginValidate, getUserType} from "../handlers/user"
 import { handleInputErrors, handlePasswordEncrypt, handleUserTypeValidate } from "../middleware"
 
 
@@ -28,6 +28,8 @@ router.post("/create",
 router.delete("/delete/:email",deleteUser)
 router.get("/get/:email", getUser)
 router.get("/get-all", getAllUsers)
+
+router.get("/get-type/:email",getUserType)
 
 router.patch("/edit-user",
     body("email")

@@ -51,9 +51,26 @@ export const getUser = async (req: Request, res: Response) => {
     }
 };
 
+export const getUserType = async (req: Request, res: Response) => {
+
+    try {
+
+        const email = req.params.email
+
+        const user = await Users_Types.findAll({ where: { email_users: email } })
+
+        res.status(200).json({ data: user })
+
+    } catch (error) {
+
+
+        res.status(400).json({ error })
+    }
+};
+
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const { email, newName, newEmail, newPassword } = req.body;
+        const { email, newName, newEmail, newPassword, newType } = req.body;
 
         // Crea un objeto para los valores a actualizar
         const updateFields: any = {};
@@ -68,13 +85,19 @@ export const updateUser = async (req: Request, res: Response) => {
         }
 
         // Si no hay nada que actualizar, devuelve un mensaje
-        if (Object.keys(updateFields).length === 0) {
-
-            return res.status(400).json({ error: [{msg:"No hay campos válidos para actualizar."}]});
+        if (Object.keys(updateFields).length === 0 && !newType) {
+            return res.status(400).json({ error: [{ msg: "No hay campos válidos para actualizar." }] });
         }
 
-        // Realiza la actualización
-        await Users.update(updateFields, { where: { email } });
+        // Realiza la actualización en la tabla Users si hay campos para actualizar
+        if (Object.keys(updateFields).length > 0) {
+            await Users.update(updateFields, { where: { email } });
+        }
+
+        // Actualiza el tipo de usuario solo si newType está definido
+        if (newType) {
+            await Users_Types.update({ name_type: newType }, { where: { email_users: email } });
+        }
 
         // Obtiene los datos del usuario actualizado
         const user = await Users.findOne({ where: { email: newEmail || email } });

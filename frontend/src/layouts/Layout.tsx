@@ -181,7 +181,7 @@ function Layout() {
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${userType}`)
             .then((response) => {
-                console.log(response.data.data)
+
                 const permissions = response.data.data.map((value: any) => value.name_permissions);
                 setPermissions(permissions)
             })
