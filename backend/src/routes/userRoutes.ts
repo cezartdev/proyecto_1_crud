@@ -25,23 +25,15 @@ router.post("/create",
 
 
 
-
-router.post("/create",
-    body("email")
-        .notEmpty().withMessage("El correo está vacío")
-        .isEmail().withMessage("El correo no está en el formato"),
-    body("password")
-        .notEmpty().withMessage("La contraseña está vacía"),
-    body("type")
-        .notEmpty().withMessage("El tipo de usuario está vacío"),
-    handleInputErrors,
-    handlePasswordEncrypt,
-    handleUserTypeValidate,
-    createUser )
-
-router.delete("/delete",deleteUser)
-router.get("/get", getUser)
+router.delete("/delete/:email",deleteUser)
+router.get("/get/:email", getUser)
 router.get("/get-all", getAllUsers)
+
+router.patch("/edit-user",
+    body("email")
+        .notEmpty().withMessage("El email no puede estar vacio"),
+    handleInputErrors,
+    updateUser);
 
 router.post("/login", 
     body("email")
