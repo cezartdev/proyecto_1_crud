@@ -139,12 +139,30 @@ const BackgroundUser = styled.div`
         margin-right: 2rem;
     }
 
+    #user-logo{
+        stroke: var(--primary-alt);
+        border-radius: 50%;
+        background: rgb(59,194,188);
+        background: linear-gradient(110deg, rgba(59,194,188,1) 23%, rgba(251,251,251,1) 100%);
+    }
+
 `
 
 
 const BackgroundLogoList = styled.div`
 
+    
+    #inicio{
+        text-decoration: none;
+        font-weight: bold;
+        color: white;
+        padding: 2rem;
+    
+    }
+
 `
+
+
 
 function Layout() {
     const navigate = useNavigate();
@@ -181,8 +199,13 @@ function Layout() {
                             <Link to="/dashboard">ERP</Link>
                         </Logo>
                         <ul>
+
+
+                            <Link to="/dashboard" id="inicio">Inicio</Link>
+
                             {permissions.includes("users") && (
                                 <>
+
                                     <MenuDropdown name="Usuarios" data={[{ name: "Crear Permisos Usuarios", link: "create-permissions" }, { name: "Administrar Permisos", link: "manage-permissions" }, { name: "Crear Usuarios", link: "create-user" }, { name: "Administrar Usuarios", link: "manage-users" }]} />
                                 </>
                             )}
@@ -218,10 +241,15 @@ function Layout() {
 
                 <BackgroundView>
                     <BackgroundUser>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width="44" height="44" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        {/* <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width="44" height="44" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
                             <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                        </svg> */}
+                        <svg id="user-logo" xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user" width="44" height="44" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                         </svg>
                         <Link to="#">{userEmail}</Link>
 

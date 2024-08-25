@@ -26,7 +26,41 @@ const Background = styled.div`
     .css-levciy-MuiTablePagination-displayedRows {
         font-size: 1.2rem;
     }
+
+    
+    
 `;
+
+const StyledTextField = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+        borderRadius: 'var(radius-m)',
+        backgroundColor: '#f9f9f9',
+        fontSize: '1.4rem',
+        '& fieldset': {
+            borderColor: 'var(--primary)',
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--primary-alt)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--primary)',
+        },
+    },
+    '& .MuiInputLabel-root': {
+        fontSize: '1.4rem',
+        color: '#666',
+        transition: 'all 0.3s ease',
+        transformOrigin: 'top left',
+    },
+    '& .MuiInputLabel-root.Mui-focused, .MuiOutlinedInput-root:hover .MuiInputLabel-root': {
+        color: 'var(--primary)',
+        transform: 'translate(50px, -10px) scale(0.8)',
+    },
+    '& .MuiOutlinedInput-input': {
+        padding: '12px 14px',
+    },
+});
+
 
 export default function DataTable() {
     const [data, setData] = useState<any[]>([]);
@@ -160,6 +194,7 @@ export default function DataTable() {
             width: 100,
             renderCell: (params) => (
                 <Button
+                    id='button-edit'
                     variant="contained"
                     color="primary"
                     onClick={() => handleOpenEditModal(params.row)}
@@ -174,6 +209,7 @@ export default function DataTable() {
             width: 100,
             renderCell: (params) => (
                 <Button
+                    id='button-delete'
                     variant="contained"
                     color="secondary"
                     onClick={() => handleOpenDeleteModal(params.row)}
@@ -201,12 +237,13 @@ export default function DataTable() {
 
     return (
         <Background>
-            <TextField
+            <StyledTextField
+                id='search-name'
                 label="Buscar por nombre"
                 variant="outlined"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                sx={{ marginBottom: "1rem" }}
+                sx={{ marginBottom: "2rem" }}
             />
             <DataGrid
                 rows={filteredData}
@@ -243,8 +280,8 @@ export default function DataTable() {
                     <p id="modal-modal-description">
                         Aquí puedes editar las propiedades del elemento seleccionado.
                     </p>
-                    <div>
-                        <h3>Permisos:</h3>
+                    <div id='modal-permissions-div'>
+                        <h3>Permisos</h3>
                         {dataAllPermissions.length > 0 ? (
                             <ul>
                                 {dataAllPermissions.map((permission, index) => (
@@ -265,8 +302,10 @@ export default function DataTable() {
                             <p>No hay permisos disponibles o se están cargando.</p>
                         )}
                     </div>
-                    <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
-                    <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseEditModal}>Cerrar</Button>
+                    <div id='modal-buttons-div'>
+                        <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
+                        <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseEditModal}>Cerrar</Button>
+                    </div>
                 </Box>
             </Modal>
             <Modal
@@ -281,9 +320,10 @@ export default function DataTable() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: 400,
+                        width: "70vw",
+                        height: "50vh",
                         bgcolor: 'background.paper',
-                        border: '2px solid #000',
+                        borderRadius: "var(--radius-m)",
                         boxShadow: 24,
                         p: 4,
                     }}
@@ -293,15 +333,19 @@ export default function DataTable() {
                         ¿Estás seguro de que quieres eliminar este tipo de usuario?
                     </p>
                     <Button
+                        id='button-edit-2'
                         variant="contained"
                         color="secondary"
                         onClick={handleDelete}
+                        sx={{ backgroundColor: "var(--primary)", mr: "2rem" }}
                     >
                         Eliminar
                     </Button>
                     <Button
+                        id='button-delete-2'
                         variant="contained"
                         onClick={handleCloseDeleteModal}
+                        sx={{ backgroundColor: "red" }}
                     >
                         Cancelar
                     </Button>
