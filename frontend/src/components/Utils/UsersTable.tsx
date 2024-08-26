@@ -52,10 +52,85 @@ const StyledTextField = styled(TextField)({
     },
     '& .MuiInputLabel-root.Mui-focused, .MuiOutlinedInput-root:hover .MuiInputLabel-root': {
         color: 'var(--primary)',
-        transform: 'translate(10px, -18px) scale(0.8)',
+        transform: 'translate(50px, -10px) scale(0.8)',
     },
     '& .MuiOutlinedInput-input': {
         padding: '12px 14px',
+    },
+});
+
+const StyledTextField2 = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+        borderRadius: 'var(--radius-m)',
+        backgroundColor: '#f9f9f9',
+        fontSize: '1.4rem',
+        '& fieldset': {
+            borderColor: 'var(--primary)',
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--primary-alt)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--primary)',
+        },
+    },
+    '& .MuiInputLabel-root': {
+        fontSize: '1.4rem',
+        color: '#666',
+        transition: 'all 0.3s ease',
+        transformOrigin: 'top left',
+    },
+    '& .MuiInputLabel-root.Mui-focused, .MuiOutlinedInput-root:hover .MuiInputLabel-root': {
+        color: 'var(--primary)',
+        transform: 'translate(5px, -18px) scale(0.8)',
+    },
+    '& .MuiOutlinedInput-input': {
+        padding: '12px 14px',
+    },
+    '& .css-14lo706>span': {
+        display: 'none'
+    },
+});
+
+const StyledTextField3 = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+        borderRadius: 'var(--radius-m)',
+        backgroundColor: '#f9f9f9',
+        fontSize: '1.4rem',
+        padding: 0,  // Elimina el relleno del contenedor
+        margin: 0,   // Elimina el margen del contenedor
+        '& fieldset': {
+            borderColor: 'var(--primary)',
+            borderWidth: '1px', // Asegúrate de que el borde tenga un ancho
+            borderStyle: 'solid', // Asegúrate de que el borde sea sólido
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--primary-alt)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--primary)',
+        },
+        '&.Mui-focused': {
+            boxShadow: 'none',  // Elimina cualquier sombra en foco
+        },
+    },
+    '& .MuiInputLabel-root': {
+        fontSize: '1.4rem',
+        color: '#666',
+        transform: 'translate(5px, -20px) scale(1)',
+        transition: 'all 0.3s ease',
+        transformOrigin: 'top left',
+    },
+    '& .MuiInputLabel-root.Mui-focused, .MuiOutlinedInput-root:hover .MuiInputLabel-root': {
+        color: 'var(--primary)',
+        transform: 'translate(5px, -20px) scale(1)',
+    },
+    '& .MuiOutlinedInput-input': {
+        padding: '12px 14px',
+    },
+
+    '& .css-14lo706>span': {
+        display: 'none'
     },
 });
 
@@ -270,7 +345,7 @@ export default function DataTable() {
                 >
                     <h2 id="modal-modal-title">Editar Usuario "{selectedRow?.name}"</h2>
                     <div>
-                        <TextField
+                        <StyledTextField3
                             fullWidth
                             margin="normal"
                             label="Nombre Actual"
@@ -279,7 +354,7 @@ export default function DataTable() {
                                 readOnly: true,
                             }}
                         />
-                        <TextField
+                        <StyledTextField3
                             fullWidth
                             margin="normal"
                             label="Correo Actual"
@@ -288,7 +363,7 @@ export default function DataTable() {
                                 readOnly: true,
                             }}
                         />
-                        <TextField
+                        <StyledTextField3
                             fullWidth
                             margin="normal"
                             label="Rol Actual"
@@ -297,21 +372,22 @@ export default function DataTable() {
                                 readOnly: true,
                             }}
                         />
-                        <StyledTextField
+                        <StyledTextField2
                             fullWidth
                             margin="normal"
                             label="Nuevo Nombre"
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                         />
-                        <StyledTextField
+                        <StyledTextField2
+
                             fullWidth
                             margin="normal"
                             label="Nuevo Correo"
                             value={newEmail}
                             onChange={(e) => setNewEmail(e.target.value)}
                         />
-                        <StyledTextField
+                        <StyledTextField2
                             fullWidth
                             margin="normal"
                             label="Nueva Contraseña"
@@ -345,24 +421,15 @@ export default function DataTable() {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         width: "50vw",
+                        maxWidth: "70rem",
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,
                         p: 4,
                     }}
                 >
-                    <h2 id="modal-modal-title">Eliminar Usuario "{selectedRow?.name}"</h2>
-                    <div>
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="Correo"
-                            value={selectedRow?.email}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
+                    <h3 id="modal-modal-title">¿Estas seguro de que quieres eliminar al Usuario?<br />  "{selectedRow?.name}"</h3>
+
                     <div id='modal-buttons-div'>
                         <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleDelete}>Eliminar</Button>
                         <Button sx={{ backgroundColor: "red", fontWeight: "bold" }} variant="contained" onClick={handleCloseDeleteModal}>Cancelar</Button>

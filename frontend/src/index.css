@@ -644,3 +644,7 @@ button {
 #button-edit-2:hover {
     background-color: var(--primary-alt);
 }
+
+.edit-input {
+    background-color: aqua;
+}

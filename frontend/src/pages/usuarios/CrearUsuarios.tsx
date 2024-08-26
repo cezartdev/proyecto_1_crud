@@ -3,12 +3,48 @@ import Dropdown from "../../components/Utils/Dropdown";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Background = styled.div``;
-
-const Title = styled.h1`
+const Background = styled.div`
     margin: 2rem auto;
     width: 95%;
 `;
+
+const Title = styled.h1`
+   
+`;
+
+const Form = styled.form`
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--radius-m);
+
+    max-width: 70rem;
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    div:nth-child(1){
+        input{
+            background-color: var(--grey-4);
+        }
+    }
+
+    div:nth-child(2){
+
+    }
+
+    div:nth-child(3){
+        input{
+
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+
+    }
+
+`
 
 function CreateUsers() {
     const [options, setOptions] = useState<string[]>([]);
@@ -48,15 +84,19 @@ function CreateUsers() {
         <>
             <Background>
                 <Title>Crear Usuarios</Title>
-                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                    <input type="text" placeholder="Nombre" onChange={(e) => { setName(e.target.value); }} />
-                    <input type="email" placeholder="Correo" onChange={(e) => { setEmail(e.target.value); }} />
-                    <input type="text" placeholder="Contraseña" onChange={(e) => { setPassword(e.target.value); }} />
+                <Form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    <div>
+                        <input type="text" placeholder="Nombre" onChange={(e) => { setName(e.target.value); }} />
+                        <input type="email" placeholder="Correo" onChange={(e) => { setEmail(e.target.value); }} />
+                        <input type="text" placeholder="Contraseña" onChange={(e) => { setPassword(e.target.value); }} />
+                    </div>
                     <div>
                         <Dropdown label="Tipo de usuario:" options={options} onSelect={handleDropdownSelect} />
                     </div>
-                    <input type="submit" value={"Enviar"} />
-                </form>
+                    <div>
+                        <input type="submit" value={"Enviar"} />
+                    </div>
+                </Form>
             </Background>
         </>
     );
