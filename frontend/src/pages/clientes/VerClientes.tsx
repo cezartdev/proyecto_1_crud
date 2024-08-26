@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import axios from "axios";
-import { useEffect, useState } from "react";
+
 
 
 
@@ -22,38 +21,11 @@ const Title = styled.h1`
 
 
 `
-interface Cliente {
-    id: number;
-    code: number;
-    ownername: string;
-    ownerlastname: string;
-    petname: string;
-    description: string;
-    img: string;
-    date: string;
-    createdAt: string;
-    updatedAt: string;
-}
+
 
 function VerClientes() {
-    const [clientes, setClientes] = useState<Cliente[]>([]);
 
 
-    const getClientes = async () => {
-        try {
-            const response = await axios.get<{ data: Cliente[] }>(
-                `${import.meta.env.VITE_BACKEND_URL}/api/asdasdas`
-            );
-            const data = response.data.data;
-            
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        getClientes();
-    }, []);
 
     return (
         <>

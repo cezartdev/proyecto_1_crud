@@ -73,6 +73,8 @@ export default function DataTable() {
     const [userPermissions, setUserPermissions] = useState<{ [key: string]: boolean }>({});
     const [isDeleted, setIsDeleted] = useState(false);
 
+    console.log(dataPermissions);
+
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-all`)
             .then((response) => {
@@ -125,7 +127,7 @@ export default function DataTable() {
             .then((response) => {
                 setIsDeleted(true);
                 setSelectedRow(null);
-
+                console.log(response)
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -181,6 +183,7 @@ export default function DataTable() {
         axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/type/edit-permissions`, payload)
             .then((response) => {
                 handleCloseEditModal();
+                console.log(response)
             })
             .catch(error => {
                 console.error("Error actualizando los permisos:", error);

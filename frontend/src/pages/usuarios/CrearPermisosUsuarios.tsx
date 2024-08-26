@@ -99,6 +99,9 @@ function PermisosUsuarios() {
         products: false,
         users: false
     });
+
+    console.log(names)
+
     const [errors, setErrors] = useState<{ typeName: string; permissions: string, otherError: string }>({
         typeName: "",
         permissions: "",

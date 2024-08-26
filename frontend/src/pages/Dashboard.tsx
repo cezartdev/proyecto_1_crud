@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Line, Pie, Bar, Bubble } from "react-chartjs-2";
+import { Line, Pie, Bar } from "react-chartjs-2";
 import UsersTable from "../components/Utils/UsersTable"
 import { useAuth } from '../components/AuthContext';
 import {
@@ -108,25 +108,25 @@ const chartDataBar = {
 };
 
 // Generar datos aleatorios para el gráfico de burbujas
-const generateRandomBubbleData = (count: any) => {
-    return Array.from({ length: count }, () => ({
-        x: Math.floor(Math.random() * 100),
-        y: Math.floor(Math.random() * 100),
-        r: Math.floor(Math.random() * 20) + 5 // Radio entre 5 y 25
-    }));
-};
+// const generateRandomBubbleData = (count: any) => {
+//     return Array.from({ length: count }, () => ({
+//         x: Math.floor(Math.random() * 100),
+//         y: Math.floor(Math.random() * 100),
+//         r: Math.floor(Math.random() * 20) + 5 // Radio entre 5 y 25
+//     }));
+// };
 
-const chartDataBubble = {
-    datasets: [
-        {
-            label: "Datos de Burbujas",
-            data: generateRandomBubbleData(50), // 50 datos aleatorios
-            backgroundColor: "#3bc2bc",
-            borderColor: "#31a39e",
-            borderWidth: 1,
-        }
-    ]
-};
+// const chartDataBubble = {
+//     datasets: [
+//         {
+//             label: "Datos de Burbujas",
+//             data: generateRandomBubbleData(50), // 50 datos aleatorios
+//             backgroundColor: "#3bc2bc",
+//             borderColor: "#31a39e",
+//             borderWidth: 1,
+//         }
+//     ]
+// };
 
 const Background = styled.div`
     width: 95%;
