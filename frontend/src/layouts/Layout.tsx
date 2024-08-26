@@ -177,7 +177,8 @@ function Layout() {
     const [permissions, setPermissions]: any = useState([]);
 
     //Falta denegar el acceso a ciertos links
-
+    //Seria bueno guardar un arreglo en authContext con los permisos de cada usuario
+    //y los links a los cuales puede acceder
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/type/get-permissions/${userType}`)
             .then((response) => {

@@ -125,6 +125,7 @@ export default function DataTable() {
             .then((response) => {
                 setIsDeleted(true);
                 setSelectedRow(null);
+
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
