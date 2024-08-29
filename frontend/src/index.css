@@ -519,8 +519,8 @@ button {
 #modal-modal-title {
     text-align: center;
     margin: 0;
+    margin-bottom: 2rem;
 }
-
 #modal-modal-description {
     text-align: center;
 }
@@ -647,4 +647,15 @@ button {
 
 .edit-input {
     background-color: aqua;
+}
+
+#edit-user-const {
+    display: flex;
+    justify-content: space-between;
+}
+
+#user-edit-new-back {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
 }

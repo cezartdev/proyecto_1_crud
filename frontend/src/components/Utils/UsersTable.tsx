@@ -337,70 +337,84 @@ export default function DataTable() {
                         transform: 'translate(-50%, -50%)',
                         width: "70vw",
                         maxWidth: "70rem",
-                        height: "90vh",
+
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,
                         p: 4,
                     }}
                 >
-                    <h2 id="modal-modal-title">Editar Usuario "{selectedRow?.name}"</h2>
+                    <h3 id="modal-modal-title">Editar Usuario "{selectedRow?.name}"</h3>
                     <div>
-                        <StyledTextField3
-                            fullWidth
-                            margin="normal"
-                            label="Nombre Actual"
-                            value={selectedRow?.name}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                        <StyledTextField3
-                            fullWidth
-                            margin="normal"
-                            label="Correo Actual"
-                            value={selectedRow?.email}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                        <StyledTextField3
-                            fullWidth
-                            margin="normal"
-                            label="Rol Actual"
-                            value={userRoles[selectedRow?.email] || 'Cargando...'}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                        <StyledTextField2
-                            fullWidth
-                            margin="normal"
-                            label="Nuevo Nombre"
-                            value={newName}
-                            onChange={(e) => setNewName(e.target.value)}
-                        />
-                        <StyledTextField2
+                        <div id='edit-user-const'>
 
-                            fullWidth
-                            margin="normal"
-                            label="Nuevo Correo"
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                        />
-                        <StyledTextField2
-                            fullWidth
-                            margin="normal"
-                            label="Nueva Contraseña"
-                            type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <Dropdown
-                            label="Nuevo Rol o tipo de usuario:"
-                            options={options}
-                            onSelect={handleDropdownSelect}
-                        />
+                            <StyledTextField3
+
+                                margin="normal"
+                                label="Nombre Actual"
+                                value={selectedRow?.name}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+
+                            />
+                            <StyledTextField3
+
+                                margin="normal"
+                                label="Correo Actual"
+                                value={selectedRow?.email}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+
+                            />
+                            <StyledTextField3
+
+                                margin="normal"
+                                label="Rol Actual"
+                                value={userRoles[selectedRow?.email] || 'Cargando...'}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                        <div id='user-edit-new-back'>
+                            <div>
+
+                                <StyledTextField2
+                                    fullWidth
+                                    margin="normal"
+                                    label="Nuevo Nombre"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                />
+                                <StyledTextField2
+
+                                    fullWidth
+                                    margin="normal"
+                                    label="Nuevo Correo"
+                                    value={newEmail}
+                                    onChange={(e) => setNewEmail(e.target.value)}
+                                />
+                                <StyledTextField2
+                                    fullWidth
+                                    margin="normal"
+                                    label="Nueva Contraseña"
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <Dropdown
+                                    label="Nuevo Rol o tipo de usuario:"
+                                    options={options}
+                                    onSelect={handleDropdownSelect}
+                                />
+                            </div>
+
+                        </div>
+
                     </div>
                     <div id='modal-buttons-div'>
                         <Button sx={{ backgroundColor: "var(--primary)", fontWeight: "bold", mr: "2rem" }} variant="contained" onClick={handleEditSubmit}>Editar</Button>
