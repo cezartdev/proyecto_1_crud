@@ -10,7 +10,7 @@ import CrearUsuarios from "./pages/usuarios/CrearUsuarios";
 import CreatePermisosUsuarios from "./pages/usuarios/CrearPermisosUsuarios";
 import AdministrarPermisos from "./pages/usuarios/AdministrarPermisos";
 import Productos from "./pages/productos/Productos";
-import Facturas from "./pages/facturas/Facturas";
+import CrearFacturas from "./pages/facturas/CrearFacturas";
 import AdministrarUsuarios from "./pages/usuarios/AdministrarUsuarios";
 const App: React.FC = () => {
     return (
@@ -29,7 +29,7 @@ const App: React.FC = () => {
                                 <Route path="create-permissions" element={<CreatePermisosUsuarios />} />
                                 <Route path="manage-permissions" element={<AdministrarPermisos />} />
                                 <Route path="create-product" element={<Productos />} />
-                                <Route path="create-invoice" element={<Facturas />} />
+                                <Route path="create-invoice" element={<CrearFacturas />} />
                                 <Route path="manage-users" element={<AdministrarUsuarios />} />
                             </Route>
                         </Route>

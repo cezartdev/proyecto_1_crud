@@ -32,7 +32,7 @@ const BackgroundColumn = styled.div`
     ul{
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+       
        
         div{
             
@@ -91,9 +91,13 @@ const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
     
-    position: relative;
     
-    margin-bottom: 2rem;
+   
+    position: fixed;
+
+    bottom: 0%;
+    left: calc(clamp(5rem, 20vw, 20rem) / 2);
+    transform: translate(-50%,-50%);
 
     button{
         color: var(--primary);
@@ -102,6 +106,8 @@ const ButtonContainer = styled.div`
         padding: 0.8rem 5rem;
 
         transition: 0.7s all ease;
+
+        
         &:hover{
             background-color: var(--primary-alt);
             color: white;
@@ -127,7 +133,7 @@ const BackgroundUser = styled.div`
 
     position: fixed;
     background-color: white;
-    
+  
     height:8vh;
     z-index: 2;
 
@@ -137,6 +143,7 @@ const BackgroundUser = styled.div`
         text-decoration: none;
         color: var(--primary-alt);
         margin-right: 2rem;
+    
     }
 
     #user-logo{
@@ -144,6 +151,7 @@ const BackgroundUser = styled.div`
         border-radius: 50%;
         background: rgb(59,194,188);
         background: linear-gradient(110deg, rgba(59,194,188,1) 23%, rgba(251,251,251,1) 100%);
+      
     }
 
 `

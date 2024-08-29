@@ -337,6 +337,7 @@ export default function DataTable() {
                         transform: 'translate(-50%, -50%)',
                         width: "70vw",
                         maxWidth: "70rem",
+                        height: "90vh",
                         bgcolor: 'background.paper',
                         borderRadius: "var(--radius-m)",
                         boxShadow: 24,

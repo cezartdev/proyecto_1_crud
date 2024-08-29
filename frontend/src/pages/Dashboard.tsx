@@ -36,7 +36,7 @@ ChartJS.register(
 
 const CardBackground = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 40rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
   gap: 4rem;
   margin: 0 auto;
   width: 95%;
@@ -50,17 +50,30 @@ const CardBackground = styled.div`
     padding: 2rem;
     border-radius: var(--radius-m);
 
+   
+
     h2{
         color: var(--primary);
+        font-size: var(--font-size-s);
+        text-align: center;
+        margin: 0;
+        margin-bottom: 2rem;
+
     }
   }
 
   div:nth-child(2){
 
-    canvas{
-        max-width: 50rem !important;
-        max-height: 50rem !important;
-      
+    div{
+        padding:0;
+        width: 100%;
+
+        canvas{
+            max-width: 26rem !important;
+            max-height: 26rem !important;
+            
+        }
+        
     }
 
   }
@@ -165,7 +178,10 @@ function Dashboard() {
                 </div>
                 <div>
                     <h2>Productos Mas vendidos</h2>
-                    <Pie data={chartDataPie} />
+                    <div>
+
+                        <Pie data={chartDataPie} />
+                    </div>
                 </div>
                 <div>
                     <h2>Ganancias Ultimos tres meses</h2>
