@@ -183,9 +183,15 @@ export default function DataTable() {
         setSearchQuery(event.target.value);
     };
 
-    const filteredData = data.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredData = data.filter(item => {
+        const role = userRoles[item.email] || ''; // Obtener el rol del usuario
+
+        return (
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            role.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    });
 
     const handleOpenEditModal = (row: any) => {
         setSelectedRow(row);
