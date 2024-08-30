@@ -9,9 +9,10 @@ import VerClientes from "./pages/clientes/VerClientes";
 import CrearUsuarios from "./pages/usuarios/CrearUsuarios";
 import CreatePermisosUsuarios from "./pages/usuarios/CrearPermisosUsuarios";
 import AdministrarPermisos from "./pages/usuarios/AdministrarPermisos";
-import Productos from "./pages/productos/Productos";
+import Productos from "./pages/productos/CrearProductos";
 import CrearFacturas from "./pages/facturas/CrearFacturas";
 import AdministrarUsuarios from "./pages/usuarios/AdministrarUsuarios";
+import CrearCliente from "./pages/clientes/CrearCliente";
 const App: React.FC = () => {
     return (
         <AuthProvider>
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                             <Route path="/dashboard" element={<Layout />}>
                                 <Route index element={<Dashboard />} />
                                 <Route path="get-customers" element={<VerClientes />} />
+                                <Route path="create-customer" element={<CrearCliente />} />
                                 <Route path="create-user" element={<CrearUsuarios />} />
                                 <Route path="create-permissions" element={<CreatePermisosUsuarios />} />
                                 <Route path="manage-permissions" element={<AdministrarPermisos />} />
